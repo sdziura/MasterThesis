@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CrossDock.Parameteres
+namespace CrossDock.Parameters
 {
-     public sealed class Parameters
+    public sealed class ParametersValues
     {
-        static Parameters _instance;
+        static ParametersValues _instance;
 
         private int _maxStorageCapacity;
         private int _numberOfWorkers;
@@ -21,11 +21,12 @@ namespace CrossDock.Parameteres
         private int _selectedRegionsBeesNumber;
         private int _eliteRegionBeesNumber;
 
-        private Parameters() { }
+        private ParametersValues() { }
 
-        public static Parameters Instance 
+        public static ParametersValues Instance
         {
-            get { return _instance ?? (_instance = new Parameters()) ; } 
+            get { return _instance ?? (_instance = new ParametersValues()); }
+            set { _instance = value; }
         }
 
         public int MaxStorageCapacity { get => _maxStorageCapacity; set => _maxStorageCapacity = value; }
