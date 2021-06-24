@@ -13,13 +13,15 @@ namespace CrossDock.Parameters
         private int _numberOfInboundDocks;
         private int _numberOfOutboundDocks;
         private int _numberOfInboundTrucks;
-        private int _numberOfOutboungTrucks;
+        private int _numberOfOutboundTrucks;
 
         private int _scoutBeesNumber;
         private int _SelectedRegionsNumber;
         private int _eliteBeesNumber;
         private int _selectedRegionsBeesNumber;
         private int _eliteRegionBeesNumber;
+
+        private int _timePerProductUnit;
 
         private ParametersValues() { }
 
@@ -34,11 +36,12 @@ namespace CrossDock.Parameters
         public int NumberOfInboundDocks { get => _numberOfInboundDocks; set => _numberOfInboundDocks = value; }
         public int NumberOfOutboundDocks { get => _numberOfOutboundDocks; set => _numberOfOutboundDocks = value; }
         public int NumberOfInboundTrucks { get => _numberOfInboundTrucks; set => _numberOfInboundTrucks = value; }
-        public int NumberOfOutboungTrucks { get => _numberOfOutboungTrucks; set => _numberOfOutboungTrucks = value; }
+        public int NumberOfOutboundTrucks { get => _numberOfOutboundTrucks; set => _numberOfOutboundTrucks = value; }
         public int ScoutBeesNumber { get => _scoutBeesNumber; set => _scoutBeesNumber = value; }
         public int SelectedRegionsNumber { get => _SelectedRegionsNumber; set => _SelectedRegionsNumber = value; }
         public int EliteBeesNumber { get => _eliteBeesNumber; set => _eliteBeesNumber = value; }
         public int SelectedRegionsBeesNumber { get => _selectedRegionsBeesNumber; set => _selectedRegionsBeesNumber = value; }
         public int EliteRegionBeesNumber { get => _eliteRegionBeesNumber; set => _eliteRegionBeesNumber = value; }
+        public int TimePerProductUnit { get => _timePerProductUnit; set => _timePerProductUnit = value; }
     }
 }
