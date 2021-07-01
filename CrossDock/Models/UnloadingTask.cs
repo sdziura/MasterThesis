@@ -10,6 +10,8 @@ namespace CrossDock.Models
         private int _arrivalTime;
         private int _productsAmount;
 
+        //static int _currentTasksAmount;
+
         public UnloadingTask(int id, int arrivalTime, int productsAmount)
         {
             _id = id;

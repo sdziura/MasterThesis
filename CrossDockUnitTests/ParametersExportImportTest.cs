@@ -16,7 +16,7 @@ namespace CrossDockUnitTests
             ParametersValues.Instance.NumberOfInboundDocks = 1;
             ParametersValues.Instance.NumberOfOutboundDocks = 1;
             ParametersValues.Instance.NumberOfInboundTrucks = 1;
-            ParametersValues.Instance.NumberOfOutboungTrucks = 1;
+            ParametersValues.Instance.NumberOfOutboundTrucks = 1;
             ParametersValues.Instance.ScoutBeesNumber = 1;
             ParametersValues.Instance.SelectedRegionsNumber = 1;
             ParametersValues.Instance.EliteBeesNumber = 1;

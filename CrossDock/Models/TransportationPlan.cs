@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using CrossDock.Parameters;
 
 namespace CrossDock.Models
 {
@@ -11,8 +12,12 @@ namespace CrossDock.Models
 
         public TransportationPlan( UnloadingTask[] unloadingTasks, LoadingTask[] loadingTasks)
         {
-            _unloadingTasks = unloadingTasks;
-            _loadingTasks = loadingTasks;
+            if (unloadingTasks.Length == ParametersValues.Instance.NumberOfInboundTrucks && loadingTasks.Length == ParametersValues.Instance.NumberOfOutboundTrucks)
+            {
+                _unloadingTasks = unloadingTasks;
+                _loadingTasks = loadingTasks;
+            }
+            else Console.WriteLine("Wrong number of tasks in transportation plan");
         }
 
         public UnloadingTask[] UnloadingTasks { get => _unloadingTasks; set => _unloadingTasks = value; }

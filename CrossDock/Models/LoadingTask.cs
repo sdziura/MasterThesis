@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using CrossDock.Parameters;
 
 namespace CrossDock.Models
 {
@@ -10,10 +11,15 @@ namespace CrossDock.Models
         private int _id;
         private int[] _demand;
 
+
         public LoadingTask(int id, int[] demand)
         {
-            _id = id;
-            _demand = demand;
+            if (demand.Length == ParametersValues.Instance.NumberOfInboundTrucks)
+            {
+                _id = id;
+                _demand = demand;
+            }
+            else Console.WriteLine("Wrong length of demand array");
         }
 
         public int Id { get => _id; }

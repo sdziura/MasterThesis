@@ -54,8 +54,7 @@ namespace CrossDock.Schedulers
                 // Check if the outbound task can be scheduled
                 for (int loadingTaskID = 0; loadingTaskID < ParametersValues.Instance.NumberOfOutboundTrucks; loadingTaskID++)
                 {
-
-
+                    // returns time when demend is met, or 0 when its still unknown
                     int arrivalTimeOut = CheckIfDemandMet(plan, scheduleUnloading, loadingTaskID, unloadingTaskID, 
                                                             isLoadingTaskScheduled, isUnloadingTaskScheduled);
                     if (arrivalTimeOut != 0)
@@ -81,7 +80,7 @@ namespace CrossDock.Schedulers
             return new Bee(scheduleUnloading, scheduleLoading);
         }
 
-        private int[] ScheduleOneUnloading(TransportationPlan plan, Random random, int taskId, int[] inboundDocksFreeTime, int[] workersFreeTime)
+        public int[] ScheduleOneUnloading(TransportationPlan plan, Random random, int taskId, int[] inboundDocksFreeTime, int[] workersFreeTime)
         {
             int arrivalTime = plan.UnloadingTasks[taskId].ArrivalTime;
             int proceedingTime = plan.UnloadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
@@ -103,7 +102,7 @@ namespace CrossDock.Schedulers
             return resultRow;
         }
 
-        private int[] ScheduleOneLoading(TransportationPlan plan, Random random, int taskId, int[] outboundDocksFreeTime, int[] workersFreeTime, int arrivalTimeOut)
+        public int[] ScheduleOneLoading(TransportationPlan plan, Random random, int taskId, int[] outboundDocksFreeTime, int[] workersFreeTime, int arrivalTimeOut)
         {
             int proceedingTimeOut = plan.LoadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
 
@@ -125,16 +124,16 @@ namespace CrossDock.Schedulers
             return resultRow;
         }
 
-        private int CheckIfDemandMet(TransportationPlan plan, int[,] scheduleUnloading, int loadingTaskID, int unloadingTaskID, int[] isLoadingTaskScheduled, int[] isUnloadingTaskScheduled)
+        public int CheckIfDemandMet(TransportationPlan plan, int[,] scheduleUnloading, int loadingTaskID, int unloadingTaskID, int[] isLoadingTaskScheduled, int[] isUnloadingTaskScheduled)
         {
-            if (isLoadingTaskScheduled[loadingTaskID] == 0 && plan.LoadingTasks[loadingTaskID].Demand[unloadingTaskID] == 1)
+            if (isLoadingTaskScheduled[loadingTaskID] == 0 && plan.LoadingTasks[loadingTaskID].Demand[unloadingTaskID] > 0)
             {
                 int[] arrivalTimesOfDemand = new int[ParametersValues.Instance.NumberOfInboundTrucks];
                 
                 // Check each demanded product if alerady arrived
                 for (int k = 0; k < ParametersValues.Instance.NumberOfInboundTrucks; k++)
                 {
-                    if (plan.LoadingTasks[loadingTaskID].Demand[k] == 1)
+                    if (plan.LoadingTasks[loadingTaskID].Demand[k] > 0)
                     {
                         if (isUnloadingTaskScheduled[k] == 0) return 0;
                         arrivalTimesOfDemand[k] = scheduleUnloading[k, 3];
