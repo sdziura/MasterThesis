@@ -12,7 +12,13 @@ Bee
 
 FIFOScheduler
 	
-Problem - the idea was to find the earliest empty time window for given resources, 
+	Problem - the idea was to find the earliest empty time window for given resources, 
 	but this process would be very complex and time consuming. Instead, the latest time
 	when all given resources are finishing all tasks that were scheduled until now.
 	
+	Scheduler schedule loading tasks as soon as they are available
+	and can use different comprarers to select the queue for unloading tasks.
+
+Neighourhood
+
+	Unshedule tasks from given resource and schedule it back to this resource, but with random choice of order and other resources.

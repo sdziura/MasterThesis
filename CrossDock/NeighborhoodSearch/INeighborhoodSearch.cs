@@ -8,6 +8,6 @@ namespace CrossDock.NeighborhoodSearch
     interface INeighborhoodSearch
     {
         //Bee SearchEliteRegion(Bee bee);
-        Bee SearchRegion(Bee bee);
+        Bee SearchRegion(Bee bee, TransportationPlan transportationPlan);
     }
 }

@@ -13,14 +13,14 @@ namespace CrossDock.Schedulers
             throw new NotImplementedException();
         }
 
-        public Bee Schedule(TransportationPlan plan)
+        public Bee Schedule(TransportationPlan plan, IComparer comparer)
         {
             // Columns number : 4 (0:dock ID, 1:worker team ID, 2:start time, 3:end time)
             int[,] scheduleUnloading = new int[ParametersValues.Instance.NumberOfInboundTrucks, 4];
             int[,] scheduleLoading = new int[ParametersValues.Instance.NumberOfOutboundTrucks, 4];
 
             // Sort unloading tasks array in the order from the earliest coming to the last one
-            Array.Sort(plan.UnloadingTasks, new CompareTaskTime());
+            Array.Sort(plan.UnloadingTasks, comparer);
 
             // For holding free time for each resource
             int[] inboundDocksFreeTime = new int[ParametersValues.Instance.NumberOfInboundDocks];

@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using CrossDock.Schedulers;
 using CrossDock.Models;
+using System.Collections;
 
 namespace CrossDockUnitTests
 {
@@ -154,8 +155,9 @@ namespace CrossDockUnitTests
             LoadingTask l2 = new LoadingTask(2, new int[] { 1, 0, 7, 1, 3 });
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
+            IComparer comparer = new CompareTaskTime();
 
-            Bee bee = sched.Schedule(plan);
+            Bee bee = sched.Schedule(plan, comparer);
 
             for (int i = 0; i < 5; i++)
             {
