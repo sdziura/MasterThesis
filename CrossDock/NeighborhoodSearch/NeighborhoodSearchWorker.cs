@@ -8,7 +8,7 @@ using CrossDock.Parameters;
 
 namespace CrossDock.NeighborhoodSearch
 {
-    class NeighborhoodSearchWorker : INeighborhoodSearch
+    public class NeighborhoodSearchWorker : INeighborhoodSearch
     {
         public Bee SearchRegion(Bee bee, TransportationPlan transportationPlan)
         {
@@ -84,49 +84,53 @@ namespace CrossDock.NeighborhoodSearch
 
                     workerFreeTime = bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 3];
                     inboundDocksFreeTime[inDockID] = bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 3];
-                    
+
+                }
+
                     // Schedule outbound tasks if ready
-                    for(int j = 0; j < ParametersValues.Instance.NumberOfOutboundTrucks; j++)
-                    {
-                        int loadingTaskId = sortedLoadingTasks[j].Id;
+                for (int j = 0; j < ParametersValues.Instance.NumberOfOutboundTrucks; j++)
+                {
+                    int loadingTaskId = sortedLoadingTasks[j].Id;
 
-                        if(isLoadingScheduled[loadingTaskId] == 0)
+                    if (isLoadingScheduled[loadingTaskId] == 0)
+                    {   
+
+                        int isDemandMet = 1;
+                        int[] demendedProductsReadyTime = new int[ParametersValues.Instance.NumberOfInboundTrucks];
+                        for(int k = 0; k < ParametersValues.Instance.NumberOfInboundTrucks; k++ )
                         {
-                            int isDemandMet = 1;
-                            int[] demendedProductsReadyTime = new int[ParametersValues.Instance.NumberOfInboundTrucks];
-                            for(int k = 0; k < ParametersValues.Instance.NumberOfInboundTrucks; k++ )
-                            {
-                                if (isUnloadingScheduled[k] < transportationPlan.LoadingTasks[loadingTaskId].Demand[k])
-                                    isDemandMet = 0;
-                                else
-                                    demendedProductsReadyTime[k] = bee.ScheduleUnloading[k, 3];
-                            }
-                            if (isDemandMet == 0) break;
+                            if (isUnloadingScheduled[k] == 0 && 0 < transportationPlan.LoadingTasks[loadingTaskId].Demand[k])
+                                isDemandMet = 0;
+                            
                             else
-                            {
-                                int outDockID = random.Next(ParametersValues.Instance.NumberOfOutboundDocks);
-                                int timeOfDemandMet = demendedProductsReadyTime.Max();
-                                int[] tempArrayOut = { timeOfDemandMet, outboundDocksFreeTime[outDockID], workerFreeTime };
-                                int timeForTaskStart = tempArrayOut.Max();
-
-                                bee.ScheduleLoading[loadingTaskId, 0] = outDockID;
-                                bee.ScheduleLoading[loadingTaskId, 1] = workerToChange;
-                                bee.ScheduleLoading[loadingTaskId, 2] = timeForTaskStart;
-                                bee.ScheduleLoading[loadingTaskId, 3] = timeForTaskStart + transportationPlan.LoadingTasks[loadingTaskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
-                                workerFreeTime = bee.ScheduleLoading[loadingTaskId, 3];
-                                outboundDocksFreeTime[outDockID] = bee.ScheduleLoading[loadingTaskId, 3];
-                                
-                                isLoadingScheduled[loadingTaskId] = 1;
-                            }
+                                demendedProductsReadyTime[k] = bee.ScheduleUnloading[k, 3];
                         }
+
+                        if (isDemandMet == 0) break;
                         else
                         {
-                            break;
+                            int outDockID = random.Next(ParametersValues.Instance.NumberOfOutboundDocks);
+                            int timeOfDemandMet = demendedProductsReadyTime.Max();
+                            int[] tempArrayOut = { timeOfDemandMet, outboundDocksFreeTime[outDockID], workerFreeTime };
+                            int timeForTaskStart = tempArrayOut.Max();
+
+                            bee.ScheduleLoading[loadingTaskId, 0] = outDockID;
+                            bee.ScheduleLoading[loadingTaskId, 1] = workerToChange;
+                            bee.ScheduleLoading[loadingTaskId, 2] = timeForTaskStart;
+                            bee.ScheduleLoading[loadingTaskId, 3] = timeForTaskStart + transportationPlan.LoadingTasks[loadingTaskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
+                            workerFreeTime = bee.ScheduleLoading[loadingTaskId, 3];
+                            outboundDocksFreeTime[outDockID] = bee.ScheduleLoading[loadingTaskId, 3];
+                            
+                            isLoadingScheduled[loadingTaskId] = 1;
                         }
                     }
+                    else
+                    {
+                        break;
+                    }
                 }
+                
             }
-
 
             return bee;
         }
