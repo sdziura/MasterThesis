@@ -86,7 +86,7 @@ namespace CrossDock.Schedulers
                 }
             }
 
-            return new Bee(scheduleUnloading, scheduleLoading);
+            return new Bee(plan, scheduleUnloading, scheduleLoading);
         }
 
         public int[] ScheduleOneUnloading( int taskId, int[] inboundDocksFreeTime, int[] workersFreeTime)

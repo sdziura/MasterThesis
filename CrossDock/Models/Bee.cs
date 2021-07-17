@@ -46,7 +46,7 @@ namespace CrossDock.Models
         public bool CheckStorage()
         {
             int currentStorageOccupation = 0;
-            StorageAction[] storageAction = new StorageAction[ParametersValues.Instance.NumberOfInboundTrucks + ParametersValues.Instance.NumberOfInboundTrucks];
+            StorageAction[] storageAction = new StorageAction[ParametersValues.Instance.NumberOfInboundTrucks + ParametersValues.Instance.NumberOfOutboundTrucks];
 
             // List the effects of unloading tasks on storage
             for(int i = 0; i < ParametersValues.Instance.NumberOfInboundTrucks; i++)
@@ -58,17 +58,22 @@ namespace CrossDock.Models
             // List the effects of loading tasks on storage
             for (int i = 0; i < ParametersValues.Instance.NumberOfOutboundTrucks; i++)
             {
-                storageAction[i + ParametersValues.Instance.NumberOfInboundTrucks].actionTime = ScheduleUnloading[i, 3];
-                storageAction[i + ParametersValues.Instance.NumberOfInboundTrucks].actionAmount = - Plan.UnloadingTasks[i].ProductsAmount;
+                storageAction[i + ParametersValues.Instance.NumberOfInboundTrucks].actionTime = ScheduleLoading[i, 3];
+                storageAction[i + ParametersValues.Instance.NumberOfInboundTrucks].actionAmount = -Plan.LoadingTasks[i].ProductsAmount;
             }
 
             // Sort actions on storage
             Array.Sort(storageAction, new CompareStorageActions());
 
             // Check if storage overloaded in any moment
-            for(int i = 0; i < ParametersValues.Instance.NumberOfInboundTrucks + ParametersValues.Instance.NumberOfInboundTrucks; i++)
+            for(int i = 0; i < (ParametersValues.Instance.NumberOfInboundTrucks + ParametersValues.Instance.NumberOfOutboundTrucks); i++)
             {
-                currentStorageOccupation = +storageAction[i].actionAmount;
+                currentStorageOccupation += storageAction[i].actionAmount;
+                // TBD
+                Console.WriteLine("\nStorage:");
+                Console.WriteLine("Time: " + storageAction[i].actionTime + " , Amount: " + storageAction[i].actionAmount);
+                Console.WriteLine(currentStorageOccupation);
+                // END TBD
                 if (currentStorageOccupation > ParametersValues.Instance.MaxStorageCapacity)
                     return false;
             }
@@ -103,8 +108,7 @@ namespace CrossDock.Models
                     return 1;
                 else
                     return 0;
-            }
-                
+            }        
         }
     }
 }
