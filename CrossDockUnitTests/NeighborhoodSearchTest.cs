@@ -33,7 +33,7 @@ namespace CrossDockUnitTests
         [Test]
         public void SearchRegionTest()
         {
-            FifoScheduler sched = new FifoScheduler();
+
 
             UnloadingTask t0 = new UnloadingTask(0, 5, 6);
             UnloadingTask t1 = new UnloadingTask(1, 10, 3);
@@ -47,8 +47,8 @@ namespace CrossDockUnitTests
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
             IComparer comparer = new CompareTaskTime();
-
-            Bee bee = sched.Schedule(plan, comparer);
+            FifoScheduler sched = new FifoScheduler(plan);
+            Bee bee = sched.Schedule(comparer);
 
             for (int i = 0; i < 5; i++)
             {

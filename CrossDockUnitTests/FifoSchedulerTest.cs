@@ -31,8 +31,6 @@ namespace CrossDockUnitTests
         [Test]
         public void ScheduleOneUnloadingTest()
         {
-            FifoScheduler sched = new FifoScheduler();
-
             UnloadingTask t0 = new UnloadingTask(0, 5, 6);
             UnloadingTask t1 = new UnloadingTask(1, 10, 3);
             UnloadingTask t2 = new UnloadingTask(2, 4, 7);
@@ -44,7 +42,8 @@ namespace CrossDockUnitTests
             LoadingTask l2 = new LoadingTask(2, new int[] { 1, 0, 0, 0, 0 });
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
-            int[] result = sched.ScheduleOneUnloading(plan, new Random(), 2, new int[] { 2, 3 }, new int[] { 8, 9 });
+            FifoScheduler sched = new FifoScheduler(plan);
+            int[] result = sched.ScheduleOneUnloading( 2, new int[] { 2, 3 }, new int[] { 8, 9 });
             Assert.GreaterOrEqual(result[2], 8);
             Assert.LessOrEqual(result[2], 9);
             Console.WriteLine(result[0]);
@@ -56,8 +55,6 @@ namespace CrossDockUnitTests
         [Test]
         public void IsDemandMetTest()
         {
-            FifoScheduler sched = new FifoScheduler();
-
             UnloadingTask t0 = new UnloadingTask(0, 5, 6);
             UnloadingTask t1 = new UnloadingTask(1, 10, 3);
             UnloadingTask t2 = new UnloadingTask(2, 4, 7);
@@ -69,7 +66,7 @@ namespace CrossDockUnitTests
             LoadingTask l2 = new LoadingTask(2, new int[] { 1, 0, 7, 1, 3 });
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
-            Random random = new Random();
+            FifoScheduler sched = new FifoScheduler(plan);
             int[,] scheduleUnloading = new int[5, 4];
 
             scheduleUnloading = new int[,]{    { 0, 0, 13, 19},
@@ -82,7 +79,7 @@ namespace CrossDockUnitTests
             //int respass = sched.CheckIfDemandMet(plan, scheduleUnloading, 1, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
             //int resfail2 = sched.CheckIfDemandMet(plan, scheduleUnloading, 2, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
 
-            int respass2 = sched.CheckIfDemandMet(plan, scheduleUnloading, 0, 1, new int[] { 0, 0, 1 }, new int[] { 1, 1, 0, 1, 1 });
+            int respass2 = sched.CheckIfDemandMet(scheduleUnloading, 0, 1, new int[] { 0, 0, 1 }, new int[] { 1, 1, 0, 1, 1 });
 
            // Assert.AreEqual(13, respass);
            // Assert.AreEqual(0, resfail);
@@ -93,8 +90,6 @@ namespace CrossDockUnitTests
         [Test]
         public void ScheduleOneLoadingTest()
         {
-            FifoScheduler sched = new FifoScheduler();
-
             UnloadingTask t0 = new UnloadingTask(0, 5, 6);
             UnloadingTask t1 = new UnloadingTask(1, 10, 3);
             UnloadingTask t2 = new UnloadingTask(2, 4, 7);
@@ -106,7 +101,7 @@ namespace CrossDockUnitTests
             LoadingTask l2 = new LoadingTask(2, new int[] { 1, 0, 7, 1, 3 });
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
-            Random random = new Random();
+            FifoScheduler sched = new FifoScheduler(plan);
             int[,] scheduleUnloading = new int[5, 4];
 
             scheduleUnloading = new int[,]{    { 0, 0, 0, 0},
@@ -115,11 +110,11 @@ namespace CrossDockUnitTests
                                                 { 1, 1, 6, 8},
                                                 { 1, 1, 8, 17} };
 
-            int resfail = sched.CheckIfDemandMet(plan, scheduleUnloading, 0, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
-            int respass = sched.CheckIfDemandMet(plan, scheduleUnloading, 1, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
-            int resfail2 = sched.CheckIfDemandMet(plan, scheduleUnloading, 2, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
+            int resfail = sched.CheckIfDemandMet(scheduleUnloading, 0, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
+            int respass = sched.CheckIfDemandMet(scheduleUnloading, 1, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
+            int resfail2 = sched.CheckIfDemandMet(scheduleUnloading, 2, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
 
-            int[] res = sched.ScheduleOneLoading(plan, random, 1, new int[] { 0 }, new int[] { 13, 17 }, respass);
+            int[] res = sched.ScheduleOneLoading( 1, new int[] { 0 }, new int[] { 13, 17 }, respass);
 
 
             Assert.AreEqual(0, res[0]);
@@ -142,8 +137,6 @@ namespace CrossDockUnitTests
         [Test]
         public void ScheduleTest()
         {
-            FifoScheduler sched = new FifoScheduler();
-
             UnloadingTask t0 = new UnloadingTask(0, 5, 6);
             UnloadingTask t1 = new UnloadingTask(1, 10, 3);
             UnloadingTask t2 = new UnloadingTask(2, 4, 7);
@@ -156,8 +149,8 @@ namespace CrossDockUnitTests
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
             IComparer comparer = new CompareTaskTime();
-
-            Bee bee = sched.Schedule(plan, comparer);
+            FifoScheduler sched = new FifoScheduler(plan);
+            Bee bee = sched.Schedule( comparer);
 
             for (int i = 0; i < 5; i++)
             {

@@ -8,12 +8,21 @@ namespace CrossDock.Schedulers
 {
     public class FifoScheduler : IScheduler
     {
+        TransportationPlan plan;
+        Random random;
+
+        public FifoScheduler(TransportationPlan plan)
+        {
+            this.plan = plan;
+            this.random = new Random();
+        }
+
         public Bee Reschedule(TransportationPlan plan, Bee bee, int time)
         {
             throw new NotImplementedException();
         }
 
-        public Bee Schedule(TransportationPlan plan, IComparer comparer)
+        public Bee Schedule( IComparer comparer)
         {
             // Columns number : 4 (0:dock ID, 1:worker team ID, 2:start time, 3:end time)
             int[,] scheduleUnloading = new int[ParametersValues.Instance.NumberOfInboundTrucks, 4];
@@ -27,7 +36,7 @@ namespace CrossDock.Schedulers
             int[] outboundDocksFreeTime = new int[ParametersValues.Instance.NumberOfOutboundDocks];
             int[] workersFreeTime = new int[ParametersValues.Instance.NumberOfWorkers];
 
-            Random random = new Random();
+            
             int[] isUnloadingTaskScheduled = new int[ParametersValues.Instance.NumberOfInboundTrucks];
             int[] isLoadingTaskScheduled = new int[ParametersValues.Instance.NumberOfOutboundTrucks];
 
@@ -37,7 +46,7 @@ namespace CrossDock.Schedulers
 
                 int unloadingTaskID = plan.UnloadingTasks[queueIterator].Id;
                 // Schedule one unloading task and get the row with all information for the schedule
-                int[] row = ScheduleOneUnloading(plan, random, unloadingTaskID, inboundDocksFreeTime, workersFreeTime);
+                int[] row = ScheduleOneUnloading( unloadingTaskID, inboundDocksFreeTime, workersFreeTime);
 
                 // Sign task and resources to schedule
                 scheduleUnloading[unloadingTaskID, 0] = row[0];
@@ -55,11 +64,11 @@ namespace CrossDock.Schedulers
                 for (int loadingTaskID = 0; loadingTaskID < ParametersValues.Instance.NumberOfOutboundTrucks; loadingTaskID++)
                 {
                     // returns time when demend is met, or 0 when its still unknown
-                    int arrivalTimeOut = CheckIfDemandMet(plan, scheduleUnloading, loadingTaskID, unloadingTaskID, 
+                    int arrivalTimeOut = CheckIfDemandMet( scheduleUnloading, loadingTaskID, unloadingTaskID, 
                                                             isLoadingTaskScheduled, isUnloadingTaskScheduled);
                     if (arrivalTimeOut != 0)
                     {
-                        int[] rowOut = ScheduleOneLoading(plan, random, loadingTaskID, outboundDocksFreeTime, workersFreeTime, arrivalTimeOut);
+                        int[] rowOut = ScheduleOneLoading( loadingTaskID, outboundDocksFreeTime, workersFreeTime, arrivalTimeOut);
 
                         // Sign task and resources to schedule
                         scheduleLoading[loadingTaskID, 0] = rowOut[0];
@@ -80,7 +89,7 @@ namespace CrossDock.Schedulers
             return new Bee(scheduleUnloading, scheduleLoading);
         }
 
-        public int[] ScheduleOneUnloading(TransportationPlan plan, Random random, int taskId, int[] inboundDocksFreeTime, int[] workersFreeTime)
+        public int[] ScheduleOneUnloading( int taskId, int[] inboundDocksFreeTime, int[] workersFreeTime)
         {
             int arrivalTime = plan.UnloadingTasks[taskId].ArrivalTime;
             int proceedingTime = plan.UnloadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
@@ -102,7 +111,7 @@ namespace CrossDock.Schedulers
             return resultRow;
         }
 
-        public int[] ScheduleOneLoading(TransportationPlan plan, Random random, int taskId, int[] outboundDocksFreeTime, int[] workersFreeTime, int arrivalTimeOut)
+        public int[] ScheduleOneLoading(int taskId, int[] outboundDocksFreeTime, int[] workersFreeTime, int arrivalTimeOut)
         {
             int proceedingTimeOut = plan.LoadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
 
@@ -124,7 +133,7 @@ namespace CrossDock.Schedulers
             return resultRow;
         }
 
-        public int CheckIfDemandMet(TransportationPlan plan, int[,] scheduleUnloading, int loadingTaskID, int unloadingTaskID, int[] isLoadingTaskScheduled, int[] isUnloadingTaskScheduled)
+        public int CheckIfDemandMet( int[,] scheduleUnloading, int loadingTaskID, int unloadingTaskID, int[] isLoadingTaskScheduled, int[] isUnloadingTaskScheduled)
         {
             if (isLoadingTaskScheduled[loadingTaskID] == 0 && plan.LoadingTasks[loadingTaskID].Demand[unloadingTaskID] > 0)
             {
