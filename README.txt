@@ -22,3 +22,11 @@ FIFOScheduler
 Neighourhood
 
 	Unshedule tasks from given resource and schedule it back to this resource, but with random choice of order and other resources.
+	Still, rescheduled tasks are put after the time when resources are free.
+
+Bee !!!
+
+	To get time of work, the time when the last task is finished is taken into account. (CHANGE TO CHECK ONLY OUTBOUND TASKS, no point of checking inbound ones).
+	
+	To check if storage is not overloaded
+	

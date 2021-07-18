@@ -15,13 +15,18 @@ namespace CrossDock.Parameters
         private int _numberOfInboundTrucks;
         private int _numberOfOutboundTrucks;
 
+        // All bees looking for initial solutions
         private int _scoutBeesNumber;
+        // Number of initial solutions in each category (selected regions + elite bees = scout bees)
         private int _SelectedRegionsNumber;
         private int _eliteBeesNumber;
+        // Number of bees looking for neighorhood 
         private int _selectedRegionsBeesNumber;
         private int _eliteRegionBeesNumber;
 
         private int _timePerProductUnit;
+
+        private int _triesToSchedulePreError;
 
         private ParametersValues() { }
 
@@ -43,5 +48,6 @@ namespace CrossDock.Parameters
         public int SelectedRegionsBeesNumber { get => _selectedRegionsBeesNumber; set => _selectedRegionsBeesNumber = value; }
         public int EliteRegionBeesNumber { get => _eliteRegionBeesNumber; set => _eliteRegionBeesNumber = value; }
         public int TimePerProductUnit { get => _timePerProductUnit; set => _timePerProductUnit = value; }
+        public int TriesToSchedulePreError { get => _triesToSchedulePreError; set => _triesToSchedulePreError = value; }
     }
 }

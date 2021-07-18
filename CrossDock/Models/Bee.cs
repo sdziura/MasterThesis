@@ -15,29 +15,32 @@ namespace CrossDock.Models
         private TransportationPlan _plan;
         private int _timeOfWork;
 
+        public Bee()
+        {
 
+        }
         public Bee(TransportationPlan plan, int[,] scheduleUnloading, int[,] scheduleLoading)
         {
             _scheduleUnloading = scheduleUnloading;
             _scheduleLoading = scheduleLoading;
             _plan = plan;
-            _timeOfWork = TimeOfWork();
+            _timeOfWork = _TimeOfWork();
         }
 
         public int[,] ScheduleUnloading { get => _scheduleUnloading; set => _scheduleUnloading = value; }
         public int[,] ScheduleLoading { get => _scheduleLoading; set => _scheduleLoading = value; }
         public TransportationPlan Plan { get => _plan; set => _plan = value; }
-        public int TimeOfWork1 { get => _timeOfWork; set => _timeOfWork = value; }
+        public int TimeOfWork { get => _TimeOfWork();}
 
-        private int TimeOfWork()
+        private int _TimeOfWork()
         {
             int maxTime = 0;
-            for(int i = 0; i < ParametersValues.Instance.NumberOfInboundTrucks; i++)
-                if (ScheduleUnloading[i, 3] < maxTime) 
-                    maxTime = ScheduleUnloading[i, 3];
+            //for(int i = 0; i < ParametersValues.Instance.NumberOfInboundTrucks; i++)
+             //   if (ScheduleUnloading[i, 3] > maxTime) 
+             //       maxTime = ScheduleUnloading[i, 3];
 
             for (int i = 0; i < ParametersValues.Instance.NumberOfOutboundTrucks; i++)
-                if (ScheduleLoading[i, 3] < maxTime)
+                if (ScheduleLoading[i, 3] > maxTime)
                     maxTime = ScheduleLoading[i, 3];
 
             return maxTime;
@@ -74,6 +77,26 @@ namespace CrossDock.Models
             }
 
             return true;
+
+        }
+
+        public void PrintSchedule()
+        {
+            Console.WriteLine("\nUnloading schedule:\n");
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                    Console.Write(ScheduleUnloading[i, j] + " ");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("\nLoading schedule:\n");
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                    Console.Write(ScheduleLoading[i, j] + " ");
+                Console.WriteLine();
+            }
 
         }
     }

@@ -111,7 +111,7 @@ namespace CrossDock.Schedulers
             return resultRow;
         }
 
-        public int[] ScheduleOneLoading(int taskId, int[] outboundDocksFreeTime, int[] workersFreeTime, int arrivalTimeOut)
+        private int[] ScheduleOneLoading(int taskId, int[] outboundDocksFreeTime, int[] workersFreeTime, int arrivalTimeOut)
         {
             int proceedingTimeOut = plan.LoadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
 
@@ -133,7 +133,7 @@ namespace CrossDock.Schedulers
             return resultRow;
         }
 
-        public int CheckIfDemandMet( int[,] scheduleUnloading, int loadingTaskID, int unloadingTaskID, int[] isLoadingTaskScheduled, int[] isUnloadingTaskScheduled)
+        private int CheckIfDemandMet( int[,] scheduleUnloading, int loadingTaskID, int unloadingTaskID, int[] isLoadingTaskScheduled, int[] isUnloadingTaskScheduled)
         {
             if (isLoadingTaskScheduled[loadingTaskID] == 0 && plan.LoadingTasks[loadingTaskID].Demand[unloadingTaskID] > 0)
             {
@@ -167,6 +167,16 @@ namespace CrossDock.Schedulers
                 return 1;
             else
                 return 0;
+        }
+    }
+
+    public class CompareTaskRandom : IComparer
+    {
+        // Compare for which task the inbound truck comes first.
+        int IComparer.Compare(Object x, Object y)
+        {
+            Random ran = new Random();
+            return ran.Next(-1,1);
         }
     }
 }
