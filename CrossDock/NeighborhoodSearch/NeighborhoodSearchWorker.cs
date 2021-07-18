@@ -10,7 +10,7 @@ namespace CrossDock.NeighborhoodSearch
 {
     public class NeighborhoodSearchWorker : INeighborhoodSearch
     {
-        public Bee SearchRegion(Bee bee, TransportationPlan transportationPlan)
+        public Bee SearchRegion(Bee bee)
         {
             Random random = new Random();
 
@@ -63,8 +63,8 @@ namespace CrossDock.NeighborhoodSearch
             }
 
             // Sort tasks
-            UnloadingTask[] sortedUnloadingTasks = transportationPlan.UnloadingTasks.OrderBy(x => random.Next()).ToArray();
-            LoadingTask[] sortedLoadingTasks = transportationPlan.LoadingTasks.OrderBy(x => random.Next()).ToArray();
+            UnloadingTask[] sortedUnloadingTasks = bee.Plan.UnloadingTasks.OrderBy(x => random.Next()).ToArray();
+            LoadingTask[] sortedLoadingTasks = bee.Plan.LoadingTasks.OrderBy(x => random.Next()).ToArray();
 
             // Schedule unscheduled tasks
             int workerFreeTime = 0;
@@ -73,14 +73,14 @@ namespace CrossDock.NeighborhoodSearch
                 if (isUnloadingScheduled[sortedUnloadingTasks[i].Id] == 0)
                 {
                     int inDockID = random.Next(ParametersValues.Instance.NumberOfInboundDocks);
-                    int[] tempArray = { transportationPlan.UnloadingTasks[sortedUnloadingTasks[i].Id].ArrivalTime, inboundDocksFreeTime[inDockID], workerFreeTime };
+                    int[] tempArray = { bee.Plan.UnloadingTasks[sortedUnloadingTasks[i].Id].ArrivalTime, inboundDocksFreeTime[inDockID], workerFreeTime };
                     int freeTime = tempArray.Max();
 
                     isUnloadingScheduled[sortedUnloadingTasks[i].Id] = 1;
                     bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 0] = inDockID;
                     bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 1] = workerToChange;
                     bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 2] = freeTime;
-                    bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 3] = freeTime + transportationPlan.UnloadingTasks[sortedUnloadingTasks[i].Id].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
+                    bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 3] = freeTime + bee.Plan.UnloadingTasks[sortedUnloadingTasks[i].Id].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
 
                     workerFreeTime = bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 3];
                     inboundDocksFreeTime[inDockID] = bee.ScheduleUnloading[sortedUnloadingTasks[i].Id, 3];
@@ -99,7 +99,7 @@ namespace CrossDock.NeighborhoodSearch
                         int[] demendedProductsReadyTime = new int[ParametersValues.Instance.NumberOfInboundTrucks];
                         for(int k = 0; k < ParametersValues.Instance.NumberOfInboundTrucks; k++ )
                         {
-                            if (isUnloadingScheduled[k] == 0 && 0 < transportationPlan.LoadingTasks[loadingTaskId].Demand[k])
+                            if (isUnloadingScheduled[k] == 0 && 0 < bee.Plan.LoadingTasks[loadingTaskId].Demand[k])
                                 isDemandMet = 0;
                             
                             else
@@ -117,7 +117,7 @@ namespace CrossDock.NeighborhoodSearch
                             bee.ScheduleLoading[loadingTaskId, 0] = outDockID;
                             bee.ScheduleLoading[loadingTaskId, 1] = workerToChange;
                             bee.ScheduleLoading[loadingTaskId, 2] = timeForTaskStart;
-                            bee.ScheduleLoading[loadingTaskId, 3] = timeForTaskStart + transportationPlan.LoadingTasks[loadingTaskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
+                            bee.ScheduleLoading[loadingTaskId, 3] = timeForTaskStart + bee.Plan.LoadingTasks[loadingTaskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
                             workerFreeTime = bee.ScheduleLoading[loadingTaskId, 3];
                             outboundDocksFreeTime[outDockID] = bee.ScheduleLoading[loadingTaskId, 3];
                             

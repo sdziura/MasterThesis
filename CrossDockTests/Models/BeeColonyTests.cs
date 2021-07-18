@@ -13,7 +13,7 @@ namespace CrossDock.Models.Tests
     public class BeeColonyTests
     {
         [TestMethod()]
-        public void BeeColonyTest()
+        public void BeeColonyConstructorsTest()
         {
             ParametersValues.Instance.MaxStorageCapacity = 1;
             ParametersValues.Instance.NumberOfWorkers = 2;

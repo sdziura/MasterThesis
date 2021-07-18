@@ -5,9 +5,9 @@ using CrossDock.Models;
 
 namespace CrossDock.NeighborhoodSearch
 {
-    interface INeighborhoodSearch
+    public interface INeighborhoodSearch
     {
         //Bee SearchEliteRegion(Bee bee);
-        Bee SearchRegion(Bee bee, TransportationPlan transportationPlan);
+        Bee SearchRegion(Bee bee);
     }
 }
