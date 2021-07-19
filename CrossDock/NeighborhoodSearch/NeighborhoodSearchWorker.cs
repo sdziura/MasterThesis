@@ -128,10 +128,8 @@ namespace CrossDock.NeighborhoodSearch
                     {
                         break;
                     }
-                }
-                
+                }                
             }
-
             return bee;
         }
     }

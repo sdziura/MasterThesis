@@ -8,23 +8,25 @@ namespace CrossDock.Parameters
     {
         static ParametersValues _instance;
 
+        // Cross dock center parameters 
         private int _maxStorageCapacity;
         private int _numberOfWorkers;
         private int _numberOfInboundDocks;
         private int _numberOfOutboundDocks;
         private int _numberOfInboundTrucks;
         private int _numberOfOutboundTrucks;
+        private int _timePerProductUnit;
 
         // All bees looking for initial solutions
         private int _scoutBeesNumber;
-        // Number of initial solutions in each category (selected regions + elite bees = scout bees)
+        // Number of initial solutions in each category (selected regions + elite bees + bees to change = scout bees)
         private int _SelectedRegionsNumber;
         private int _eliteRegionsNumber;
         // Number of bees looking for neighorhood 
         private int _selectedRegionsBeesNumber;
         private int _eliteRegionBeesNumber;
 
-        private int _timePerProductUnit;
+        private int _numberOfIterations;
 
         private int _triesToSchedulePreError;
 
@@ -49,5 +51,6 @@ namespace CrossDock.Parameters
         public int EliteRegionBeesNumber { get => _eliteRegionBeesNumber; set => _eliteRegionBeesNumber = value; }
         public int TimePerProductUnit { get => _timePerProductUnit; set => _timePerProductUnit = value; }
         public int TriesToSchedulePreError { get => _triesToSchedulePreError; set => _triesToSchedulePreError = value; }
+        public int NumberOfIterations { get => _numberOfIterations; set => _numberOfIterations = value; }
     }
 }

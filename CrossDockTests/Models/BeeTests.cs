@@ -23,7 +23,7 @@ namespace CrossDock.Models.Tests
             ParametersValues.Instance.NumberOfOutboundTrucks = 3;
             ParametersValues.Instance.ScoutBeesNumber = 1;
             ParametersValues.Instance.SelectedRegionsNumber = 1;
-            ParametersValues.Instance.EliteBeesNumber = 1;
+            ParametersValues.Instance.EliteRegionsNumber = 1;
             ParametersValues.Instance.SelectedRegionsBeesNumber = 1;
             ParametersValues.Instance.EliteRegionBeesNumber = 1;
             ParametersValues.Instance.TimePerProductUnit = 1;
