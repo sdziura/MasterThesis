@@ -9,6 +9,6 @@ namespace CrossDock.Schedulers
     interface IScheduler
     {
         Bee Schedule( IComparer comparer);
-        Bee Reschedule(TransportationPlan plan, Bee bee, int time);
+        Bee Reschedule(IComparer comparer, Bee bee, int time);
     }
 }

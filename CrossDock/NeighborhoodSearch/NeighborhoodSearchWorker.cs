@@ -28,22 +28,16 @@ namespace CrossDock.NeighborhoodSearch
             {
                 if (bee.ScheduleUnloading[i, 1] == workerToChange)
                 {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        bee.ScheduleUnloading[i, j] = 0; 
-                    }
+                    for (int j = 0; j < 4; j++) bee.ScheduleUnloading[i, j] = 0;  
                     isUnloadingScheduled[i] = 0;
                 }
             }
             // Deleting from schedule loading tasks assigned to drawn worker
             for (int i = 0; i < ParametersValues.Instance.NumberOfOutboundTrucks; i++)
             {
-                if (bee.ScheduleLoading[i, 1] == workerToChange)
+                if (bee.ScheduleLoading[i, 1] == workerToChange) //TO ADD HERE DELETE OF TASKS WHEN DEMAND NOT MET
                 {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        bee.ScheduleLoading[i, j] = 0;
-                    }
+                    for (int j = 0; j < 4; j++)bee.ScheduleLoading[i, j] = 0;
                     isLoadingScheduled[i] = 0;
                 }
             }
