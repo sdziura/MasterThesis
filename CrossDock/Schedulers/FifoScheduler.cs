@@ -3,22 +3,50 @@ using System;
 using CrossDock.Parameters;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CrossDock.Schedulers
 {
     public class FifoScheduler : IScheduler
     {
-        TransportationPlan plan;
-        Random random;
+        private TransportationPlan _plan;
+        private Random _random;
+        private IComparer<UnloadingTask> _unloadingComparer;
+        private IComparer<LoadingTask> _loadingComparer;
+        
 
+        public TransportationPlan Plan { get => _plan; set => _plan = value; }
+        public IComparer<UnloadingTask> UnloadingComparer { get => _unloadingComparer; set => _unloadingComparer = value; }
+        public IComparer<LoadingTask> LoadingComparer { get => _loadingComparer; set => _loadingComparer = value; }
+
+        public FifoScheduler() 
+        { }
         public FifoScheduler(TransportationPlan plan)
         {
-            this.plan = plan;
-            this.random = new Random();
+            this._plan = plan;
+            this._random = new Random();
+            _unloadingComparer = new CompareTaskRandom<UnloadingTask>();
+            _loadingComparer = new CompareTaskRandom<LoadingTask>();
+        }
+        public FifoScheduler(TransportationPlan plan, IComparer<UnloadingTask> unloadingComparer, IComparer<LoadingTask> loadingComaprer)
+        {
+            this._plan = plan;
+            this._random = new Random();
+            _unloadingComparer = unloadingComparer;
+            _loadingComparer = loadingComaprer;
         }
 
-        public Bee Reschedule(IComparer comparer, Bee bee, int time)
+
+        public Bee Reschedule( Bee bee, int time)
         {
+            // Get tasks from Transportation Plan and sort them
+            UnloadingTask[] sortedUnloadingTasks = new UnloadingTask[ParametersValues.Instance.NumberOfInboundTrucks]; 
+            LoadingTask[] sortedLoadingTasks = new LoadingTask[ParametersValues.Instance.NumberOfOutboundTrucks]; 
+            Array.Copy(Plan.UnloadingTasks, sortedUnloadingTasks, ParametersValues.Instance.NumberOfInboundTrucks);
+            Array.Copy(Plan.LoadingTasks, sortedLoadingTasks, ParametersValues.Instance.NumberOfOutboundTrucks);
+            Array.Sort(sortedUnloadingTasks, UnloadingComparer);
+            Array.Sort(sortedLoadingTasks, LoadingComparer);
+
             // Make arrays informing which tasks are scheduled. Initial value is 1 for each task.
             int[] isUnloadingScheduled = new int[ParametersValues.Instance.NumberOfInboundTrucks];
             int[] isLoadingScheduled = new int[ParametersValues.Instance.NumberOfOutboundTrucks];
@@ -67,12 +95,12 @@ namespace CrossDock.Schedulers
             }
 
             // Schedule back
-            Array.Sort(plan.UnloadingTasks, comparer);
-            Array.Sort(plan.LoadingTasks, comparer);
-
             for (int queueIterator = 0; queueIterator < ParametersValues.Instance.NumberOfInboundTrucks; queueIterator++)
             {
-                int unloadingTaskID = plan.UnloadingTasks[queueIterator].Id;
+                int unloadingTaskID = sortedUnloadingTasks[queueIterator].Id;
+
+                if (isUnloadingScheduled[unloadingTaskID] == 1) continue;
+
                 // Schedule one unloading task and get the row with all information for the schedule
                 int[] row = ScheduleOneUnloading(unloadingTaskID, inboundDocksFreeTime, workersFreeTime);
 
@@ -87,16 +115,20 @@ namespace CrossDock.Schedulers
                 workersFreeTime[row[1]] = row[3];
 
                 isUnloadingScheduled[unloadingTaskID] = 1;
+                
 
                 // Check if the outbound task can be scheduled
-                for (int loadingTaskID = 0; loadingTaskID < ParametersValues.Instance.NumberOfOutboundTrucks; loadingTaskID++)
+                for (int loadingTaskIterator = 0; loadingTaskIterator < ParametersValues.Instance.NumberOfOutboundTrucks; loadingTaskIterator++)
                 {
+                    int loadingTaskID = sortedLoadingTasks[loadingTaskIterator].Id;
+                    if (isLoadingScheduled[loadingTaskID] == 1) continue;
+
                     // returns time when demend is met, or 0 when its still unknown
-                    int arrivalTimeOut = CheckIfDemandMet(bee.ScheduleUnloading, loadingTaskID,
+                    int arrivalTimeOut = CheckIfDemandMet(bee.ScheduleUnloading, loadingTaskIterator,
                                                             isLoadingScheduled, isUnloadingScheduled);
                     if (arrivalTimeOut != 0)
                     {
-                        int[] rowOut = ScheduleOneLoading(loadingTaskID, outboundDocksFreeTime, workersFreeTime, arrivalTimeOut);
+                        int[] rowOut = ScheduleOneLoading(loadingTaskIterator, outboundDocksFreeTime, workersFreeTime, arrivalTimeOut);
 
                         // Sign task and resources to schedule
                         bee.ScheduleLoading[loadingTaskID, 0] = rowOut[0];
@@ -113,17 +145,20 @@ namespace CrossDock.Schedulers
                 }
             }
             return bee;
-
         }
 
-        public Bee Schedule( IComparer comparer)
+        public Bee Schedule()
         {
+            UnloadingTask[] sortedUnloadingTasks = new UnloadingTask[ParametersValues.Instance.NumberOfInboundTrucks];
+            LoadingTask[] sortedLoadingTasks = new LoadingTask[ParametersValues.Instance.NumberOfOutboundTrucks];
+            Array.Copy(Plan.UnloadingTasks, sortedUnloadingTasks, ParametersValues.Instance.NumberOfInboundTrucks);
+            Array.Copy(Plan.LoadingTasks, sortedLoadingTasks, ParametersValues.Instance.NumberOfOutboundTrucks);
+            Array.Sort(sortedUnloadingTasks, UnloadingComparer);
+            Array.Sort(sortedLoadingTasks, LoadingComparer);
+
             // Columns number : 4 (0:dock ID, 1:worker team ID, 2:start time, 3:end time)
             int[,] scheduleUnloading = new int[ParametersValues.Instance.NumberOfInboundTrucks, 4];
             int[,] scheduleLoading = new int[ParametersValues.Instance.NumberOfOutboundTrucks, 4];
-
-            // Sort unloading tasks array in the order from the earliest coming to the last one
-            Array.Sort(plan.UnloadingTasks, comparer);
 
             // For holding free time for each resource
             int[] inboundDocksFreeTime = new int[ParametersValues.Instance.NumberOfInboundDocks];
@@ -138,7 +173,7 @@ namespace CrossDock.Schedulers
             for (int queueIterator = 0; queueIterator < ParametersValues.Instance.NumberOfInboundTrucks; queueIterator++)
             {
 
-                int unloadingTaskID = plan.UnloadingTasks[queueIterator].Id;
+                int unloadingTaskID = sortedUnloadingTasks[queueIterator].Id;
                 // Schedule one unloading task and get the row with all information for the schedule
                 int[] row = ScheduleOneUnloading( unloadingTaskID, inboundDocksFreeTime, workersFreeTime);
 
@@ -178,17 +213,17 @@ namespace CrossDock.Schedulers
                     }            
                 }
             }
-            return new Bee(plan, scheduleUnloading, scheduleLoading);
+            return new Bee(Plan, scheduleUnloading, scheduleLoading);
         }
 
         public int[] ScheduleOneUnloading( int taskId, int[] inboundDocksFreeTime, int[] workersFreeTime)
         {
-            int arrivalTime = plan.UnloadingTasks[taskId].ArrivalTime;
-            int proceedingTime = plan.UnloadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
+            int arrivalTime = Plan.UnloadingTasks[taskId].ArrivalTime;
+            int proceedingTime = Plan.UnloadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
 
             // Draw random resources (Dock and Worker team) which will be used for this task 
-            int randomInDockID = random.Next(ParametersValues.Instance.NumberOfInboundDocks);
-            int randomWorkerID = random.Next(ParametersValues.Instance.NumberOfWorkers);
+            int randomInDockID = _random.Next(ParametersValues.Instance.NumberOfInboundDocks);
+            int randomWorkerID = _random.Next(ParametersValues.Instance.NumberOfWorkers);
 
             // Get earliest common free time for chosen dock, worker team and time of arrival
             int[] tempArray = { arrivalTime, inboundDocksFreeTime[randomInDockID], workersFreeTime[randomWorkerID] };
@@ -205,11 +240,11 @@ namespace CrossDock.Schedulers
 
         private int[] ScheduleOneLoading(int taskId, int[] outboundDocksFreeTime, int[] workersFreeTime, int arrivalTimeOut)
         {
-            int proceedingTimeOut = plan.LoadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
+            int proceedingTimeOut = Plan.LoadingTasks[taskId].ProductsAmount * ParametersValues.Instance.TimePerProductUnit;
 
             // Draw random resources (Dock and Worker team) which will be used for this task 
-            int randomOutDockID = random.Next(ParametersValues.Instance.NumberOfOutboundDocks);
-            int randomWorkerIDout = random.Next(ParametersValues.Instance.NumberOfWorkers);
+            int randomOutDockID = _random.Next(ParametersValues.Instance.NumberOfOutboundDocks);
+            int randomWorkerIDout = _random.Next(ParametersValues.Instance.NumberOfWorkers);
 
             // Get earliest common free time for chosen dock, worker team and time of arrival
             int[] tempArrayOut = { arrivalTimeOut, outboundDocksFreeTime[randomOutDockID], workersFreeTime[randomWorkerIDout] };
@@ -226,16 +261,16 @@ namespace CrossDock.Schedulers
         }
 
         // deleted from paremeters: "int unloadingTaskID," regarding change in code
-        private int CheckIfDemandMet( int[,] scheduleUnloading, int loadingTaskID, int[] isLoadingTaskScheduled, int[] isUnloadingTaskScheduled)
+        private int CheckIfDemandMet( int[,] scheduleUnloading, int loadingTaskIterator, int[] isLoadingTaskScheduled, int[] isUnloadingTaskScheduled)
         {
-            if (isLoadingTaskScheduled[loadingTaskID] == 0)// && plan.LoadingTasks[loadingTaskID].Demand[unloadingTaskID] > 0)
+            if (isLoadingTaskScheduled[Plan.LoadingTasks[loadingTaskIterator].Id] == 0)// && plan.LoadingTasks[loadingTaskID].Demand[unloadingTaskID] > 0)
             {
                 int[] arrivalTimesOfDemand = new int[ParametersValues.Instance.NumberOfInboundTrucks];
                 
                 // Check each demanded product if alerady arrived
                 for (int k = 0; k < ParametersValues.Instance.NumberOfInboundTrucks; k++)
                 {
-                    if (plan.LoadingTasks[loadingTaskID].Demand[k] > 0)
+                    if (Plan.LoadingTasks[loadingTaskIterator].Demand[k] > 0)
                     {
                         if (isUnloadingTaskScheduled[k] == 0) return 0;
                         arrivalTimesOfDemand[k] = scheduleUnloading[k, 3];
@@ -247,26 +282,24 @@ namespace CrossDock.Schedulers
         }
     }
 
-    public class CompareTaskTime : IComparer
+    public class CompareTaskTime: IComparer<UnloadingTask>
     {
         // Compare for which task the inbound truck comes first.
-        int IComparer.Compare(Object x, Object y)
+        public int Compare(UnloadingTask x, UnloadingTask y)
         {
-            UnloadingTask a = (UnloadingTask)x;
-            UnloadingTask b = (UnloadingTask)y;
-            if (a.ArrivalTime < b.ArrivalTime)
+            if (x.ArrivalTime < y.ArrivalTime)
                 return -1;
-            else if (a.ArrivalTime > b.ArrivalTime)
+            else if (x.ArrivalTime > y.ArrivalTime)
                 return 1;
             else
                 return 0;
         }
     }
 
-    public class CompareTaskRandom : IComparer
+    public class CompareTaskRandom<T> : IComparer<T>
     {
         // Compare for which task the inbound truck comes first.
-        int IComparer.Compare(Object x, Object y)
+        public int Compare(T x, T y)
         {
             Random ran = new Random();
             return ran.Next(-1,1);

@@ -81,7 +81,7 @@ namespace CrossDock.NeighborhoodSearch
 
                 }
 
-                    // Schedule outbound tasks if ready
+                // Schedule outbound tasks if ready
                 for (int j = 0; j < ParametersValues.Instance.NumberOfOutboundTrucks; j++)
                 {
                     int loadingTaskId = sortedLoadingTasks[j].Id;

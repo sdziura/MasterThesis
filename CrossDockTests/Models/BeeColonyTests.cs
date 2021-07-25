@@ -41,15 +41,15 @@ namespace CrossDock.Models.Tests
             LoadingTask l2 = new LoadingTask(2, new int[] { 1, 0, 7, 1, 3 });
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
-            IComparer comparer = new CompareTaskTime();
+            IComparer<UnloadingTask> comparer = new CompareTaskTime();
 
             Console.WriteLine("\n----------------------\nThis one should FAIL: \n");
-            BeeColony beeColony = new BeeColony(plan, new NeighborhoodSearchWorker(), comparer);
+            BeeColony beeColony = new BeeColony(plan, new NeighborhoodSearchWorker(), comparer, new CompareTaskRandom<LoadingTask>());
 
             Console.WriteLine("\n----------------------\nThis one should PASS: \n");
             Console.WriteLine("Example bee: \n");
             ParametersValues.Instance.MaxStorageCapacity = 27;
-            beeColony = new BeeColony(plan, new NeighborhoodSearchWorker(), comparer);
+            beeColony = new BeeColony(plan, new NeighborhoodSearchWorker(), comparer, new CompareTaskRandom<LoadingTask>());
             beeColony.Colony[6].PrintSchedule();
 
             Console.WriteLine("\nResults: \n");
@@ -89,8 +89,8 @@ namespace CrossDock.Models.Tests
             LoadingTask l2 = new LoadingTask(2, new int[] { 1, 0, 7, 1, 3 });
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
-            IComparer comparer = new CompareTaskTime();
-            BeeColony beeColony = new BeeColony(plan, new NeighborhoodSearchWorker(), comparer);
+            IComparer<UnloadingTask> comparer = new CompareTaskTime();
+            BeeColony beeColony = new BeeColony(plan, new NeighborhoodSearchWorker(), comparer, new CompareTaskRandom<LoadingTask>());
 
             Console.WriteLine("Before checking neighborhood: ");
             Console.WriteLine(beeColony.BestBee.TimeOfWork);

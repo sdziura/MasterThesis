@@ -1,18 +1,19 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CrossDock.Models;
+using CrossDock.Schedulers;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using CrossDock.Schedulers;
-using System.Collections;
 using CrossDock.Parameters;
+using CrossDock.Models;
+using System.Collections;
 
-namespace CrossDock.Models.Tests
+namespace CrossDock.Schedulers.Tests
 {
     [TestClass()]
-    public class BeeTests
+    public class FifoSchedulerTests
     {
-        public void Setup()
+        [TestMethod()]
+        public void RescheduleTest()
         {
 
             ParametersValues.Instance.MaxStorageCapacity = 1;
@@ -27,12 +28,6 @@ namespace CrossDock.Models.Tests
             ParametersValues.Instance.SelectedRegionsBeesNumber = 1;
             ParametersValues.Instance.EliteRegionBeesNumber = 1;
             ParametersValues.Instance.TimePerProductUnit = 1;
-        }
-
-        [TestMethod()]
-        public void CheckStorageTest()
-        {
-            Setup();
 
             UnloadingTask t0 = new UnloadingTask(0, 5, 6);
             UnloadingTask t1 = new UnloadingTask(1, 10, 3);
@@ -48,7 +43,7 @@ namespace CrossDock.Models.Tests
             IComparer<UnloadingTask> comparer = new CompareTaskTime();
             FifoScheduler sched = new FifoScheduler(plan);
             Bee bee = sched.Schedule();
-            Console.WriteLine("\nNumber of iterations: " + (ParametersValues.Instance.NumberOfInboundTrucks + ParametersValues.Instance.NumberOfOutboundTrucks));
+
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -56,7 +51,6 @@ namespace CrossDock.Models.Tests
                 Console.WriteLine();
             }
             Console.WriteLine();
-
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -64,16 +58,25 @@ namespace CrossDock.Models.Tests
                 Console.WriteLine();
             }
 
-            Console.WriteLine("\n\n\nCheck Storage1:");
-            Assert.IsFalse(bee.CheckStorage());
+            t2 = new UnloadingTask(2, 10, 7);
+            sched.Plan.UnloadingTasks[2] = t2;
+            Console.WriteLine("\nAfter change:\n");
 
-            Console.WriteLine("\n\n\nCheck Storage2:\n");
-            ParametersValues.Instance.MaxStorageCapacity = 20;
-            Assert.IsFalse(bee.CheckStorage());
+            bee = sched.Reschedule(bee, 5);
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                    Console.Write(bee.ScheduleUnloading[i, j] + " ");
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                    Console.Write(bee.ScheduleLoading[i, j] + " ");
+                Console.WriteLine();
+            }
 
-            Console.WriteLine("\n\n\nCheck Storage3:\n");
-            ParametersValues.Instance.MaxStorageCapacity = 27;
-            Assert.IsTrue(bee.CheckStorage());
         }
     }
 }

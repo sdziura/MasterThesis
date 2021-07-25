@@ -13,19 +13,19 @@ namespace CrossDock.Models
         private Bee[] _colony;
         private IScheduler _scheduler;
         INeighborhoodSearch _neighborhoodSearch;
-        IComparer _comparer;
+        //IComparer _comparer;
 
         public BeeColony()
         {
 
         }
 
-        public BeeColony(TransportationPlan plan, INeighborhoodSearch neighborhoodSearch, IComparer comparer)
+        public BeeColony(TransportationPlan plan, INeighborhoodSearch neighborhoodSearch, IComparer<UnloadingTask> unloadingComparer, IComparer<LoadingTask> loadingComparer)
         {
-            _scheduler = new FifoScheduler(plan);
+            _scheduler = new FifoScheduler(plan, unloadingComparer, loadingComparer);
             _colony = new Bee[ParametersValues.Instance.ScoutBeesNumber];
             _neighborhoodSearch = neighborhoodSearch;
-            _comparer = comparer;
+            //_comparer = comparer;
 
             for(int i = 0; i < ParametersValues.Instance.ScoutBeesNumber; i++)
             {
@@ -37,7 +37,7 @@ namespace CrossDock.Models
                         Console.WriteLine("Could not find bee nr " + i + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity );
                         return;
                     }
-                    _colony[i] = _scheduler.Schedule(comparer);
+                    _colony[i] = _scheduler.Schedule();
                 } while (!_colony[i].CheckStorage());
             }
             Array.Sort(_colony, new CompareBee());
@@ -102,7 +102,7 @@ namespace CrossDock.Models
                             Console.WriteLine("Could not find neighbor new bee " + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity);
                             return;
                         }
-                        newBee = _scheduler.Schedule(Comparer);
+                        newBee = _scheduler.Schedule();
                     } while (!newBee.CheckStorage());
                 }
                 if (newBee.TimeOfWork < _colony[scoutID].TimeOfWork)
@@ -121,7 +121,7 @@ namespace CrossDock.Models
 
         public Bee[] Colony { get => _colony; set => _colony = value; }
         public INeighborhoodSearch NeighborhoodSearch { get => _neighborhoodSearch; set => _neighborhoodSearch = value; }
-        public IComparer Comparer { get => _comparer; set => _comparer = value; }
+        //public IComparer Comparer { get => _comparer; set => _comparer = value; }
         public Bee BestBee { get => Colony[0]; }
     }
 

@@ -8,7 +8,7 @@ using System.Collections;
 
 namespace CrossDockUnitTests
 {
-    public class FifoSchedulerTests
+    public class FifoSchedulerTests : FifoScheduler
     {
         [SetUp]
         public void Setup()
@@ -22,7 +22,7 @@ namespace CrossDockUnitTests
             ParametersValues.Instance.NumberOfOutboundTrucks = 3;
             ParametersValues.Instance.ScoutBeesNumber = 1;
             ParametersValues.Instance.SelectedRegionsNumber = 1;
-            ParametersValues.Instance.EliteBeesNumber = 1;
+            ParametersValues.Instance.EliteRegionsNumber = 1;
             ParametersValues.Instance.SelectedRegionsBeesNumber = 1;
             ParametersValues.Instance.EliteRegionBeesNumber = 1;
             ParametersValues.Instance.TimePerProductUnit = 1;
@@ -79,12 +79,12 @@ namespace CrossDockUnitTests
             //int respass = sched.CheckIfDemandMet(plan, scheduleUnloading, 1, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
             //int resfail2 = sched.CheckIfDemandMet(plan, scheduleUnloading, 2, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
 
-            int respass2 = sched.CheckIfDemandMet(scheduleUnloading, 0, 1, new int[] { 0, 0, 1 }, new int[] { 1, 1, 0, 1, 1 });
+            //int respass2 = sched.CheckIfDemandMet(scheduleUnloading, 0, 1, new int[] { 0, 0, 1 }, new int[] { 1, 1, 0, 1, 1 });
 
            // Assert.AreEqual(13, respass);
            // Assert.AreEqual(0, resfail);
            // Assert.AreEqual(0, resfail2);
-            Assert.AreEqual(19, respass2);
+           // Assert.AreEqual(19, respass2);
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace CrossDockUnitTests
             LoadingTask l2 = new LoadingTask(2, new int[] { 1, 0, 7, 1, 3 });
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
-            FifoScheduler sched = new FifoScheduler(plan);
+            this.Plan = plan;
             int[,] scheduleUnloading = new int[5, 4];
 
             scheduleUnloading = new int[,]{    { 0, 0, 0, 0},
@@ -110,7 +110,7 @@ namespace CrossDockUnitTests
                                                 { 1, 1, 6, 8},
                                                 { 1, 1, 8, 17} };
 
-            int resfail = sched.CheckIfDemandMet(scheduleUnloading, 0, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
+            int resfail = CheckIfDemandMet(scheduleUnloading, 0, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
             int respass = sched.CheckIfDemandMet(scheduleUnloading, 1, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
             int resfail2 = sched.CheckIfDemandMet(scheduleUnloading, 2, 3, new int[] { 0, 0, 0 }, new int[] { 0, 1, 0, 1, 1 });
 
