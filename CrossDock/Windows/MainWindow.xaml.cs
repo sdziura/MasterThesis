@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CrossDock
+namespace CrossDock.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,6 +23,12 @@ namespace CrossDock
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ParameteresButton_Click(object sender, RoutedEventArgs e)
+        {
+            ParametersWindow parametersWindow = new ParametersWindow();
+            parametersWindow.Show();
         }
     }
 }

@@ -1,0 +1,76 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CrossDock.Windows"
+        xmlns:Parameters="clr-namespace:CrossDock.Parameters" x:Class="CrossDock.Windows.ParametersWindow"
+        mc:Ignorable="d"
+        Title="ParametersWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <Style x:Key = "textBlockStyle" TargetType = "TextBlock">
+            <Setter Property = "Margin" Value = "10 0 0 0" />
+            <Setter Property = "VerticalAlignment" Value = "Bottom" />
+        </Style>
+        <Style x:Key = "textBoxStyle" TargetType = "TextBox">
+            <Setter Property = "HorizontalAlignment" Value = "Left" />
+            <Setter Property = "VerticalAlignment" Value = "Bottom" />
+            <Setter Property = "Width" Value = "120" />
+            <Setter Property = "TextWrapping" Value = "Wrap" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Parameters" Grid.ColumnSpan="2" Margin="50 0 0 0" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
+
+        <TextBlock Text="Outbound Docks" Style="{StaticResource textBlockStyle}" Grid.Row="1" Grid.Column="0" />
+        <TextBox  x:Name="OutboundDocksNumberBox"  Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="1" Grid.Column="1" />
+        <TextBlock Text="Inbound Docks" Style="{StaticResource textBlockStyle}" Grid.Row="2" Grid.Column="0" />
+        <TextBox  x:Name="InboundDocksNumberBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="2" Grid.Column="1" />
+        <TextBlock Text="Workers" Style="{StaticResource textBlockStyle}" Grid.Row="3" Grid.Column="0" />
+        <TextBox  x:Name="WorkersNumberBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="3" Grid.Column="1" />
+        <TextBlock Text="Outbound Trucks" Style="{StaticResource textBlockStyle}" Grid.Row="4" Grid.Column="0" />
+        <TextBox  x:Name="OutboundTrucksNumberBox"  Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="4" Grid.Column="1" />
+        <TextBlock Text="Inbound Trucks" Style="{StaticResource textBlockStyle}" Grid.Row="5" Grid.Column="0" />
+        <TextBox  x:Name="InboundTrucksNumberBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="5" Grid.Column="1" />
+        <TextBlock Text="Time Per Unit" Style="{StaticResource textBlockStyle}" Grid.Row="6" Grid.Column="0" />
+        <TextBox  x:Name="TimePerUnitBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="6" Grid.Column="1" />
+        <TextBlock Text="Storage Capacity" Style="{StaticResource textBlockStyle}" Grid.Row="7" Grid.Column="0" />
+        <TextBox  x:Name="MaxStorageBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="7" Grid.Column="1" />
+
+        <TextBlock Text="Scout Bees" Style="{StaticResource textBlockStyle}" Grid.Row="1" Grid.Column="2" />
+        <TextBox  x:Name="ScoutBeesBox"  Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="1" Grid.Column="3" />
+        <TextBlock Text="Selected Regions" Style="{StaticResource textBlockStyle}" Grid.Row="2" Grid.Column="2" />
+        <TextBox  x:Name="SelectedRegionsBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="2" Grid.Column="3" />
+        <TextBlock Text="Elite Regions" Style="{StaticResource textBlockStyle}" Grid.Row="3" Grid.Column="2" />
+        <TextBox  x:Name="EliteRegionsBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="3" Grid.Column="3" />
+        <TextBlock Text="Bees at Selected Redion" Style="{StaticResource textBlockStyle}" Grid.Row="4" Grid.Column="2" />
+        <TextBox  x:Name="BeesAtSelectedRegionBox"  Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="4" Grid.Column="3" />
+        <TextBlock Text="Bees at Elite Region" Style="{StaticResource textBlockStyle}" Grid.Row="5" Grid.Column="2" />
+        <TextBox  x:Name="BeesAtEliteRegionBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="5" Grid.Column="31" />
+        <TextBlock Text="Iterations" Style="{StaticResource textBlockStyle}" Grid.Row="6" Grid.Column="2" />
+        <TextBox  x:Name="IterationsNumberBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="6" Grid.Column="3" />
+        <TextBlock Text="Nuber of Tries" Style="{StaticResource textBlockStyle}" Grid.Row="7" Grid.Column="2" />
+        <TextBox  x:Name="TriesToScheduleBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="7" Grid.Column="3" />
+
+    </Grid>
+    
+</Window>
