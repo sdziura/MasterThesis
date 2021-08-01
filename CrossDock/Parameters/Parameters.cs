@@ -9,26 +9,26 @@ namespace CrossDock.Parameters
         static ParametersValues _instance;
 
         // Cross dock center parameters 
-        private int _maxStorageCapacity;
-        private int _numberOfWorkers;
-        private int _numberOfInboundDocks;
-        private int _numberOfOutboundDocks;
-        private int _numberOfInboundTrucks;
-        private int _numberOfOutboundTrucks;
-        private int _timePerProductUnit;
+        private int _maxStorageCapacity = 100;
+        private int _numberOfWorkers = 5;
+        private int _numberOfInboundDocks = 5;
+        private int _numberOfOutboundDocks = 5;
+        private int _numberOfInboundTrucks = 10;
+        private int _numberOfOutboundTrucks = 10;
+        private int _timePerProductUnit = 1;
 
         // All bees looking for initial solutions
-        private int _scoutBeesNumber;
+        private int _scoutBeesNumber = 40;
         // Number of initial solutions in each category (selected regions + elite bees + bees to change = scout bees)
-        private int _SelectedRegionsNumber;
-        private int _eliteRegionsNumber;
+        private int _SelectedRegionsNumber = 20;
+        private int _eliteRegionsNumber = 10;
         // Number of bees looking for neighorhood 
-        private int _selectedRegionsBeesNumber;
-        private int _eliteRegionBeesNumber;
+        private int _selectedRegionsBeesNumber = 5;
+        private int _eliteRegionBeesNumber = 10;
 
-        private int _numberOfIterations;
+        private int _numberOfIterations = 10;
 
-        private int _triesToSchedulePreError;
+        private int _triesToSchedulePreError = 5;
 
         private ParametersValues() { }
 

@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:CrossDock.Windows"
         xmlns:Parameters="clr-namespace:CrossDock.Parameters" x:Class="CrossDock.Windows.ParametersWindow"
         mc:Ignorable="d"
-        Title="ParametersWindow" Height="450" Width="800">
-
+        Title="ParametersWindow" Height="450" Width="800"
+        DataContext="{Binding Source={x:Static Parameters:ParametersValues.Instance}}">
     <Window.Resources>
         <Style x:Key = "textBlockStyle" TargetType = "TextBlock">
             <Setter Property = "Margin" Value = "10 0 0 0" />
@@ -37,40 +37,43 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="Parameters" Grid.ColumnSpan="2" Margin="50 0 0 0" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
 
         <TextBlock Text="Outbound Docks" Style="{StaticResource textBlockStyle}" Grid.Row="1" Grid.Column="0" />
-        <TextBox  x:Name="OutboundDocksNumberBox"  Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="1" Grid.Column="1" />
+        <TextBox  x:Name="OutboundDocksNumberBox"  Text="{Binding Path=NumberOfOutboundDocks, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textBoxStyle}" Grid.Row="1" Grid.Column="1" />
         <TextBlock Text="Inbound Docks" Style="{StaticResource textBlockStyle}" Grid.Row="2" Grid.Column="0" />
-        <TextBox  x:Name="InboundDocksNumberBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="2" Grid.Column="1" />
+        <TextBox  x:Name="InboundDocksNumberBox" Text="{Binding Path=NumberOfInboundDocks}"  Style="{StaticResource textBoxStyle}" Grid.Row="2" Grid.Column="1" />
         <TextBlock Text="Workers" Style="{StaticResource textBlockStyle}" Grid.Row="3" Grid.Column="0" />
-        <TextBox  x:Name="WorkersNumberBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="3" Grid.Column="1" />
+        <TextBox  x:Name="WorkersNumberBox" Text="{Binding Path=NumberOfWorkers}" Style="{StaticResource textBoxStyle}" Grid.Row="3" Grid.Column="1" />
         <TextBlock Text="Outbound Trucks" Style="{StaticResource textBlockStyle}" Grid.Row="4" Grid.Column="0" />
-        <TextBox  x:Name="OutboundTrucksNumberBox"  Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="4" Grid.Column="1" />
+        <TextBox  x:Name="OutboundTrucksNumberBox"  Text="{Binding Path=NumberOfOutboundTrucks}" Style="{StaticResource textBoxStyle}" Grid.Row="4" Grid.Column="1" />
         <TextBlock Text="Inbound Trucks" Style="{StaticResource textBlockStyle}" Grid.Row="5" Grid.Column="0" />
-        <TextBox  x:Name="InboundTrucksNumberBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="5" Grid.Column="1" />
+        <TextBox  x:Name="InboundTrucksNumberBox" Text="{Binding Path=NumberOfInboundTrucks}" Style="{StaticResource textBoxStyle}" Grid.Row="5" Grid.Column="1" />
         <TextBlock Text="Time Per Unit" Style="{StaticResource textBlockStyle}" Grid.Row="6" Grid.Column="0" />
-        <TextBox  x:Name="TimePerUnitBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="6" Grid.Column="1" />
+        <TextBox  x:Name="TimePerUnitBox" Text="{Binding Path=TimePerProductUnit}" Style="{StaticResource textBoxStyle}" Grid.Row="6" Grid.Column="1" />
         <TextBlock Text="Storage Capacity" Style="{StaticResource textBlockStyle}" Grid.Row="7" Grid.Column="0" />
-        <TextBox  x:Name="MaxStorageBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="7" Grid.Column="1" />
+        <TextBox  x:Name="MaxStorageBox" Text="{Binding Path=MaxStorageCapacity}" Style="{StaticResource textBoxStyle}" Grid.Row="7" Grid.Column="1" />
 
         <TextBlock Text="Scout Bees" Style="{StaticResource textBlockStyle}" Grid.Row="1" Grid.Column="2" />
-        <TextBox  x:Name="ScoutBeesBox"  Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="1" Grid.Column="3" />
+        <TextBox  x:Name="ScoutBeesBox"  Text="{Binding Path=ScoutBeesNumber}" Style="{StaticResource textBoxStyle}" Grid.Row="1" Grid.Column="3" />
         <TextBlock Text="Selected Regions" Style="{StaticResource textBlockStyle}" Grid.Row="2" Grid.Column="2" />
-        <TextBox  x:Name="SelectedRegionsBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="2" Grid.Column="3" />
+        <TextBox  x:Name="SelectedRegionsBox" Text="{Binding Path=SelectedRegionsNumber}" Style="{StaticResource textBoxStyle}" Grid.Row="2" Grid.Column="3" />
         <TextBlock Text="Elite Regions" Style="{StaticResource textBlockStyle}" Grid.Row="3" Grid.Column="2" />
-        <TextBox  x:Name="EliteRegionsBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="3" Grid.Column="3" />
+        <TextBox  x:Name="EliteRegionsBox" Text="{Binding Path=EliteRegionsNumber}" Style="{StaticResource textBoxStyle}" Grid.Row="3" Grid.Column="3" />
         <TextBlock Text="Bees at Selected Redion" Style="{StaticResource textBlockStyle}" Grid.Row="4" Grid.Column="2" />
-        <TextBox  x:Name="BeesAtSelectedRegionBox"  Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="4" Grid.Column="3" />
+        <TextBox  x:Name="BeesAtSelectedRegionBox"  Text="{Binding Path=SelectedRegionsBeesNumber}" Style="{StaticResource textBoxStyle}" Grid.Row="4" Grid.Column="3" />
         <TextBlock Text="Bees at Elite Region" Style="{StaticResource textBlockStyle}" Grid.Row="5" Grid.Column="2" />
-        <TextBox  x:Name="BeesAtEliteRegionBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="5" Grid.Column="31" />
+        <TextBox  x:Name="BeesAtEliteRegionBox" Text="{Binding Path=EliteRegionBeesNumber}" Style="{StaticResource textBoxStyle}" Grid.Row="5" Grid.Column="31" />
         <TextBlock Text="Iterations" Style="{StaticResource textBlockStyle}" Grid.Row="6" Grid.Column="2" />
-        <TextBox  x:Name="IterationsNumberBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="6" Grid.Column="3" />
+        <TextBox  x:Name="IterationsNumberBox" Text="{Binding Path=NumberOfIterations}" Style="{StaticResource textBoxStyle}" Grid.Row="6" Grid.Column="3" />
         <TextBlock Text="Nuber of Tries" Style="{StaticResource textBlockStyle}" Grid.Row="7" Grid.Column="2" />
-        <TextBox  x:Name="TriesToScheduleBox" Text="TextBox" Style="{StaticResource textBoxStyle}" Grid.Row="7" Grid.Column="3" />
+        <TextBox  x:Name="TriesToScheduleBox" Text="{Binding Path=TriesToSchedulePreError}" Style="{StaticResource textBoxStyle}" Grid.Row="7" Grid.Column="3" />
 
+        <Button x:Name="LoadParametersButton" Width="70" Height="40" Content="Load" Click="LoadParametersButton_Click" Grid.Column="2" Grid.Row="0"/>
+        <Button x:Name="SaveParametersButton" Width="70" Height="40" Content="Save" Click="SaveParametersButton_Click"  Grid.Column="3" Grid.Row="0"/>
     </Grid>
     
 </Window>
