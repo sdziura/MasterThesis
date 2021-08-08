@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
     <Grid>
-        <Button x:Name="ParameteresButton" Content="Parameters" HorizontalAlignment="Left" Margin="110,140,0,0" VerticalAlignment="Top" Click="ParameteresButton_Click" Height="29" Width="79" FontWeight="Normal"/>
-
+        <Button x:Name="ParameteresButton" Content="Parameters" HorizontalAlignment="Left" Margin="110,140,0,0" VerticalAlignment="Top" Click="ParameteresButton_Click" Height="30" Width="80" FontWeight="Normal"/>
+        <Button x:Name="TransportationPlanButton" Content="Transportation &#xa; Plan" HorizontalAlignment="Left" Margin="238,140,0,0" VerticalAlignment="Top" Click="TransportationPlanButton_Click" Height="52" Width="80" FontWeight="Normal" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
     </Grid>
 </Window>

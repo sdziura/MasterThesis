@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrossDock.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace CrossDock.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
+        public TransportationPlan transportationPlan = new TransportationPlan();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,6 +32,12 @@ namespace CrossDock.Windows
         {
             ParametersWindow parametersWindow = new ParametersWindow();
             parametersWindow.Show();
+        }
+
+        private void TransportationPlanButton_Click(object sender, RoutedEventArgs e)
+        {
+            TransportationPlanWindow transportationPlanWindow = new TransportationPlanWindow(transportationPlan);
+            transportationPlanWindow.Show();
         }
     }
 }

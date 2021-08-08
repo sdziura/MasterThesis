@@ -7,6 +7,26 @@
         mc:Ignorable="d"
         Title="TransportationPlanWindow" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         
+        <DataGrid Name="ArrivalTimesGrid" Grid.Column="0" Grid.Row="1"  Margin="30,30,30,30" Width="104" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id"  Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Arrival times" Binding="{Binding ArrivalTime}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid Name="DemandGrid" Grid.Column="1" Grid.Row="1"  Margin="30,30,30,30" Width="auto" AutoGenerateColumns="False" />
+
+        <TextBlock Text="Inbound trucks arrival times" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" />
+        <TextBlock Text="Demand for outbound trucks" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" />
+
+
     </Grid>
 </Window>
