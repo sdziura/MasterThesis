@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CrossDock.Generators
 {
-    class TestDataGenerator
+    public class TestDataGenerator
     {
         public TransportationPlan GenerateTransportationPlan(int maxArrivalTimes, int maxProductDemand, int avgPrecentageOfProductTypes)
         {

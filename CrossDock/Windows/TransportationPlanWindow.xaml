@@ -15,7 +15,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <DataGrid Name="ArrivalTimesGrid" Grid.Column="0" Grid.Row="1"  Margin="30,30,30,30" Width="104" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id"  Binding="{Binding Id}" IsReadOnly="True"/>
@@ -26,6 +26,9 @@
 
         <TextBlock Text="Inbound trucks arrival times" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" />
         <TextBlock Text="Demand for outbound trucks" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" />
+        <Button x:Name="GenerateDataButton" Content="Generate Data" HorizontalAlignment="Left" Margin="200,70,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="2" Height="35" Width="80" Click="GenerateDataButton_Click"/>
+        <Button x:Name="SaveDataButton" Content="Save Data" HorizontalAlignment="Left" Margin="200,120,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="2" Height="35" Width="80" Click="SaveDataButton_Click" />
+        <Button x:Name="LoadDataButton" Content="Load Data" HorizontalAlignment="Left" Margin="200,170,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="2" Height="35" Width="80" Click="LoadDataButton_Click" />
 
 
     </Grid>

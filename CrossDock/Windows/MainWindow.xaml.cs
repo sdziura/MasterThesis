@@ -21,12 +21,14 @@ namespace CrossDock.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        public TransportationPlan transportationPlan = new TransportationPlan();
+        private static TransportationPlan _transportationPlan = new TransportationPlan();
 
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        public static TransportationPlan TransportationPlan { get => _transportationPlan; set => _transportationPlan = value; }
 
         private void ParameteresButton_Click(object sender, RoutedEventArgs e)
         {
@@ -36,8 +38,13 @@ namespace CrossDock.Windows
 
         private void TransportationPlanButton_Click(object sender, RoutedEventArgs e)
         {
-            TransportationPlanWindow transportationPlanWindow = new TransportationPlanWindow(transportationPlan);
+            TransportationPlanWindow transportationPlanWindow = new TransportationPlanWindow();
             transportationPlanWindow.Show();
+            //TEST
+            //HelperWindow helper = new HelperWindow(TransportationPlan.ArrivalTimes[0]);
+            //helper.Show();
+            //TEST
+
         }
     }
 }

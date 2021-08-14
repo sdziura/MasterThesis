@@ -1,4 +1,5 @@
-﻿using CrossDock.Models;
+﻿using CrossDock.Generators;
+using CrossDock.Models;
 using CrossDock.Parameters;
 using System;
 using System.Collections.Generic;
@@ -19,18 +20,12 @@ namespace CrossDock.Windows
     /// </summary>
     public partial class TransportationPlanWindow : Window
     {
-        private TransportationPlan _transportationPlan;
-        //private int[] _arrivalTimes = new int[ParametersValues.Instance.NumberOfInboundTrucks];
-        //private int[,] _demand = new int[ParametersValues.Instance.NumberOfOutboundTrucks, ParametersValues.Instance.NumberOfInboundTrucks];
-        //private LoadingTask[] _demand = new LoadingTask[ParametersValues.Instance.NumberOfOutboundTrucks];
-
-
-        public TransportationPlanWindow(TransportationPlan transportationPlan)
+        TransportationPlanLoader loader = new TransportationPlanLoader();
+        
+        public TransportationPlanWindow()
         {
             InitializeComponent();
-            //TransportationPlan = transportationPlan;
-            //ArrivalTimes = transportationPlan.ArrivalTimes;
-            //Demand = transportationPlan.LoadingTasks;
+            
             var colId = new DataGridTextColumn();
             var bindingId = new Binding("Id");
             colId.Binding = bindingId;
@@ -45,14 +40,60 @@ namespace CrossDock.Windows
                 col.Header = new string(i.ToString());
                 DemandGrid.Columns.Add(col);
             }
-            ArrivalTimesGrid.ItemsSource = transportationPlan.UnloadingTasks;
-            DemandGrid.ItemsSource = transportationPlan.LoadingTasks;
+            ArrivalTimesGrid.ItemsSource = MainWindow.TransportationPlan.UnloadingTasks;
+            DemandGrid.ItemsSource = MainWindow.TransportationPlan.LoadingTasks;
         }
 
-        //public int[] ArrivalTimes { get => _arrivalTimes; set => _arrivalTimes = value; }
-        //public int[,] Demand { get => _demand; set => _demand = value; }
-       // public LoadingTask[] Demand { get => _demand; set => _demand = value; }
+        private void GenerateDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            GenerateDataWindow generateDataWindow = new GenerateDataWindow();
+            generateDataWindow.Show();
+            //TEST
+            //HelperWindow helper = new HelperWindow(MainWindow.TransportationPlan.ArrivalTimes[0]);
+            //helper.Show();
+            //TEST
+        }
 
-        public TransportationPlan TransportationPlan { get => _transportationPlan; set => _transportationPlan = value; }
+        private void SaveDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+
+            // Set filter for file extension and default file extension 
+            dlg.DefaultExt = ".json";
+            dlg.Filter = "JSON Files (*.json)|*.json|TXT Files (*.txt)|*.txt|ALL Files (*)|*";
+            dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+            // Display OpenFileDialog by calling ShowDialog method 
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox 
+            if (result == true)
+            {
+                // Open document 
+                string fileName = dlg.FileName;
+                loader.ExportPlan(fileName);
+            }
+        }
+
+        private void LoadDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+
+            // Set filter for file extension and default file extension 
+            dlg.DefaultExt = ".json";
+            dlg.Filter = "JSON Files (*.json)|*.json|TXT Files (*.txt)|*.txt|ALL Files |*";
+            dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+            // Display OpenFileDialog by calling ShowDialog method 
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox 
+            if (result == true)
+            {
+                // Open document 
+                string fileName = dlg.FileName;
+                loader.ImportPlan(fileName);
+            }
+        }
     }
 }
