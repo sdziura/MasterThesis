@@ -16,6 +16,12 @@
         <TextBox x:Name="maxArrivalTimesBox" Grid.Column="0" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TextBox x:Name="maxProductDemandBox" Grid.Column="1" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TextBox x:Name="avgPrecentageOfProductTypesBox" Grid.Column="2"  Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <TextBlock Text="Maximal arrival times" Grid.Column="0" Margin="0 0 0 50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="Maximal amount of product" Grid.Column="1" Margin="0 0 0 50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="% of ordered types of products" Grid.Column="2"  Margin="0 0 0 50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
         <Button x:Name="OkButton" Content="OK" Grid.Column="2" HorizontalAlignment="Left" Margin="132,90,0,0" VerticalAlignment="Top" Width="45" Click="OkButton_Click"/>
+    
     </Grid>
 </Window>

@@ -1,0 +1,51 @@
+﻿<Window x:Class="CrossDock.Windows.RunAlgoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CrossDock.Windows"
+        mc:Ignorable="d"
+        Title="RunAlgoWindow" Height="450" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Button x:Name="RunStaticButon" Content="Run Static" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Width="100" Height="30" Click="RunStaticButon_Click"/>
+        <Button x:Name="RunDynamicButon" Content="Run Dynamic" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="3" Width="100" Height="30" Click="RunDynamicButon_Click"/>
+
+        <TextBlock x:Name="StaticInitBlock" Text="{Binding}" Grid.Column="0" Grid.Row="1" FontSize="20" FontWeight="Black"/>
+        <TextBlock x:Name="StaticWorstBlock" Text="{Binding}" Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" FontSize="20" FontWeight="Black"/>
+        <TextBlock x:Name="StaticResultBlock" Text="{Binding}" Grid.Column="1" Grid.Row="1" FontSize="30" FontWeight="Bold"/>
+        <!--<DataGrid x:Name="StaticInboundGrid" Grid.Row="2" Grid.Column="0" >
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Id"  Binding="{Binding Id}" IsReadOnly="True"/>
+            <DataGridTextColumn Header="Dock"  Binding="{Binding }" IsReadOnly="True"/>
+            <DataGridTextColumn Header="Worker"  Binding="{Binding Id}" IsReadOnly="True"/>
+            <DataGridTextColumn Header="Start time"  Binding="{Binding Id}" IsReadOnly="True"/>
+            <DataGridTextColumn Header="Finish time" Binding="{Binding ArrivalTime}" IsReadOnly="True"/>
+        </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="StaticOutboundGrid" Grid.Row="2" Grid.Column="1" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id"  Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Dock"  Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Worker"  Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Start time"  Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Finish time" Binding="{Binding ArrivalTime}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="DynamicGrid" Grid.Row="2" Grid.Column="3" />-->
+        
+
+    </Grid>
+</Window>

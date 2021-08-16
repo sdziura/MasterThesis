@@ -1,11 +1,12 @@
 ﻿using CrossDock.Models;
 using CrossDock.Windows;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
+//using System.Text.Json;
 
 namespace CrossDock.Generators
 {
@@ -16,10 +17,14 @@ namespace CrossDock.Generators
             try
             {
                 // Create directory string for saving parameters settings
-                string jsonParameters = JsonSerializer.Serialize(MainWindow.TransportationPlan);
+                //string jsonParameters = JsonSerializer.Serialize(MainWindow.TransportationPlan);
+                //string baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "saved_files", "transportation_plan");
+                //string fileDirectory = Path.Combine(baseDirectory, fileName);
+
+                // Create directory string for saving parameters settings
+                string jsonParameters = JsonConvert.SerializeObject(MainWindow.TransportationPlan);
                 string baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "saved_files", "transportation_plan");
                 string fileDirectory = Path.Combine(baseDirectory, fileName);
-
 
                 // Create directory for saving settings, if doesn't exists
                 if (!Directory.Exists(baseDirectory))
@@ -79,7 +84,7 @@ namespace CrossDock.Generators
 
             try
             {
-                MainWindow.TransportationPlan = JsonSerializer.Deserialize<TransportationPlan>(jsonParameters);
+                MainWindow.TransportationPlan = JsonConvert.DeserializeObject<TransportationPlan>(jsonParameters);
             }
             catch (Exception e)
             {

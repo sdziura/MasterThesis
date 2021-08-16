@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,6 +44,12 @@ namespace CrossDock.Windows
                 string fileName = dlg.FileName;
                 parametersExportImport.ImportParameters(fileName);
             }
+
+            // Try for updating text boxes- failed
+
+            //IEnumerable<TextBox> boxCollection = ParamGrid.Children.OfType<TextBox>();
+            //foreach (TextBox box in boxCollection)
+             //   box.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
 
         private void SaveParametersButton_Click(object sender, RoutedEventArgs e)

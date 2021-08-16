@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 
 namespace CrossDock.Parameters
 {
@@ -15,7 +15,7 @@ namespace CrossDock.Parameters
             try
             {
                 // Create directory string for saving parameters settings
-                string jsonParameters = JsonSerializer.Serialize(ParametersValues.Instance);
+                string jsonParameters = JsonConvert.SerializeObject(ParametersValues.Instance);
                 string baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "saved_files", "parameters_settings");
                 string fileDirectory = Path.Combine(baseDirectory, fileName);
 
@@ -78,7 +78,7 @@ namespace CrossDock.Parameters
 
             try
             {
-                ParametersValues.Instance = JsonSerializer.Deserialize<ParametersValues>(jsonParameters);
+                ParametersValues.Instance = JsonConvert.DeserializeObject<ParametersValues>(jsonParameters);
             }
             catch (Exception e)
             {

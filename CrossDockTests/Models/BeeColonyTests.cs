@@ -104,6 +104,9 @@ namespace CrossDock.Models.Tests
         public void BeeColonyTest2()
         {
 
+            //BeeColony colony = new BeeColony(MainWindow.TransportationPlan, new NeighborhoodSearchWorker(), new CompareTaskTime(), new CompareTaskRandom<LoadingTask>());
+            //colony.AllGenerations();
+
         }
     }
 }

@@ -21,7 +21,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid x:Name="ParamGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>

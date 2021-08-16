@@ -46,5 +46,11 @@ namespace CrossDock.Windows
             //TEST
 
         }
+
+        private void RunAlgoButton_Click(object sender, RoutedEventArgs e)
+        {
+            RunAlgoWindow runAlgoWindow = new RunAlgoWindow();
+            runAlgoWindow.Show();
+        }
     }
 }

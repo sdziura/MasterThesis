@@ -94,6 +94,9 @@ namespace CrossDock.Windows
                 string fileName = dlg.FileName;
                 loader.ImportPlan(fileName);
             }
+
+            ArrivalTimesGrid.ItemsSource = MainWindow.TransportationPlan.UnloadingTasks;
+            DemandGrid.ItemsSource = MainWindow.TransportationPlan.LoadingTasks;
         }
     }
 }
