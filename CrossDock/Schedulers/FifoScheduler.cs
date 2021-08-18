@@ -39,6 +39,7 @@ namespace CrossDock.Schedulers
 
         public Bee Reschedule( Bee bee, int time)
         {
+            
             // Get tasks from Transportation Plan and sort them
             UnloadingTask[] sortedUnloadingTasks = new UnloadingTask[ParametersValues.Instance.NumberOfInboundTrucks]; 
             LoadingTask[] sortedLoadingTasks = new LoadingTask[ParametersValues.Instance.NumberOfOutboundTrucks]; 
@@ -116,34 +117,34 @@ namespace CrossDock.Schedulers
 
                 isUnloadingScheduled[unloadingTaskID] = 1;
                 
+            }
+            // Check if the outbound task can be scheduled
+            for (int loadingTaskIterator = 0; loadingTaskIterator < ParametersValues.Instance.NumberOfOutboundTrucks; loadingTaskIterator++)
+            {
+                int loadingTaskID = sortedLoadingTasks[loadingTaskIterator].Id;
+                if (isLoadingScheduled[loadingTaskID] == 1) continue;
 
-                // Check if the outbound task can be scheduled
-                for (int loadingTaskIterator = 0; loadingTaskIterator < ParametersValues.Instance.NumberOfOutboundTrucks; loadingTaskIterator++)
+                // returns time when demend is met, or 0 when its still unknown
+                int arrivalTimeOut = CheckIfDemandMet(bee.ScheduleUnloading, loadingTaskID,
+                                                        isLoadingScheduled, isUnloadingScheduled);
+                if (arrivalTimeOut != 0)
                 {
-                    int loadingTaskID = sortedLoadingTasks[loadingTaskIterator].Id;
-                    if (isLoadingScheduled[loadingTaskID] == 1) continue;
+                    int[] rowOut = ScheduleOneLoading(loadingTaskIterator, outboundDocksFreeTime, workersFreeTime, arrivalTimeOut);
 
-                    // returns time when demend is met, or 0 when its still unknown
-                    int arrivalTimeOut = CheckIfDemandMet(bee.ScheduleUnloading, loadingTaskIterator,
-                                                            isLoadingScheduled, isUnloadingScheduled);
-                    if (arrivalTimeOut != 0)
-                    {
-                        int[] rowOut = ScheduleOneLoading(loadingTaskIterator, outboundDocksFreeTime, workersFreeTime, arrivalTimeOut);
+                    // Sign task and resources to schedule
+                    bee.ScheduleLoading[loadingTaskID, 0] = rowOut[0];
+                    bee.ScheduleLoading[loadingTaskID, 1] = rowOut[1];
+                    bee.ScheduleLoading[loadingTaskID, 2] = rowOut[2];
+                    bee.ScheduleLoading[loadingTaskID, 3] = rowOut[3];
 
-                        // Sign task and resources to schedule
-                        bee.ScheduleLoading[loadingTaskID, 0] = rowOut[0];
-                        bee.ScheduleLoading[loadingTaskID, 1] = rowOut[1];
-                        bee.ScheduleLoading[loadingTaskID, 2] = rowOut[2];
-                        bee.ScheduleLoading[loadingTaskID, 3] = rowOut[3];
+                    // Update free time of dock and worker team
+                    outboundDocksFreeTime[rowOut[0]] = rowOut[3];
+                    workersFreeTime[rowOut[1]] = rowOut[3];
 
-                        // Update free time of dock and worker team
-                        outboundDocksFreeTime[rowOut[0]] = rowOut[3];
-                        workersFreeTime[rowOut[1]] = rowOut[3];
-
-                        isLoadingScheduled[loadingTaskID] = 1;
-                    }
+                    isLoadingScheduled[loadingTaskID] = 1;
                 }
             }
+            
             return bee;
         }
 

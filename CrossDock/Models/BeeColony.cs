@@ -50,8 +50,76 @@ namespace CrossDock.Models
 
         public void NextIteration()
         {
+            Random random = new Random();
             IComparer beeComparer = new CompareBee();
             for(int scoutID = 0; scoutID < ParametersValues.Instance.ScoutBeesNumber; scoutID++ )
+            {
+                Bee newBee = new Bee();
+                if (scoutID < ParametersValues.Instance.EliteRegionsNumber)
+                {
+                    Bee[] neighborBees = new Bee[ParametersValues.Instance.EliteRegionBeesNumber];
+                    for (int i = 0; i < ParametersValues.Instance.EliteRegionBeesNumber; i++)
+                    {
+                        int tries = 0;
+                        do
+                        {
+                            if (tries++ > ParametersValues.Instance.TriesToSchedulePreError)
+                            {
+                                Console.WriteLine("Could not find neighbor elite nr " + i + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity);
+                                neighborBees[i] = new Bee(false);
+                                break;
+                            }
+                            neighborBees[i] = _scheduler.Reschedule(_colony[scoutID].Clone(), random.Next(_colony[scoutID].TimeOfWork));
+                        } while (!neighborBees[i].CheckStorage());
+                    }
+                    Array.Sort(neighborBees, beeComparer);
+                    newBee = neighborBees[0];
+                }
+                else if (scoutID < ParametersValues.Instance.SelectedRegionsNumber)
+                {
+                    Bee[] neighborBees = new Bee[ParametersValues.Instance.SelectedRegionsBeesNumber];
+                    for (int i = 0; i < ParametersValues.Instance.SelectedRegionsBeesNumber; i++)
+                    {
+                        int tries = 0;
+                        do
+                        {
+                            if (tries++ > ParametersValues.Instance.TriesToSchedulePreError)
+                            {
+                                Console.WriteLine("Could not find neighbor normal nr " + i + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity);
+                                neighborBees[i] = new Bee(false);
+                                break;
+                            }
+                            neighborBees[i] = _scheduler.Reschedule(_colony[scoutID].Clone(), random.Next(_colony[scoutID].TimeOfWork));
+                        } while (!neighborBees[i].CheckStorage());
+                    }
+                    Array.Sort(neighborBees, beeComparer);
+                    newBee = neighborBees[0];
+                }
+                else
+                {
+                    int tries = 0;
+                    do
+                    {
+                        if (tries++ > ParametersValues.Instance.TriesToSchedulePreError)
+                        {
+                            Console.WriteLine("Could not find neighbor new bee " + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity);
+                            newBee = new Bee(false);
+                            break;
+                        }
+                        newBee = _scheduler.Schedule();
+                    } while (!newBee.CheckStorage());
+                }
+                Console.WriteLine(newBee.TimeOfWork + " " + _colony[scoutID].TimeOfWork);//tbd
+                if (newBee.TimeOfWork < _colony[scoutID].TimeOfWork)
+                    _colony[scoutID] = newBee;
+            }
+            Array.Sort(_colony, beeComparer);
+        }
+
+        public void NextIteration_OLD()
+        {
+            IComparer beeComparer = new CompareBee();
+            for (int scoutID = 0; scoutID < ParametersValues.Instance.ScoutBeesNumber; scoutID++)
             {
                 Bee newBee = new Bee();
                 if (scoutID < ParametersValues.Instance.EliteRegionsNumber)

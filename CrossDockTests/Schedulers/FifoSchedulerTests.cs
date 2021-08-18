@@ -61,8 +61,8 @@ namespace CrossDock.Schedulers.Tests
             t2 = new UnloadingTask(2, 10, 7);
             sched.Plan.UnloadingTasks[2] = t2;
             Console.WriteLine("\nAfter change:\n");
-
-            bee = sched.Reschedule(bee, 5);
+            Random random = new Random();
+            bee = sched.Reschedule(bee, random.Next(bee.TimeOfWork));
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -76,6 +76,14 @@ namespace CrossDock.Schedulers.Tests
                     Console.Write(bee.ScheduleLoading[i, j] + " ");
                 Console.WriteLine();
             }
+
+        }
+
+        [TestMethod()]
+        public void RescheduleTest1()
+        {
+            //BeeColony colony = new BeeColony(MainWindow.TransportationPlan, new NeighborhoodSearchWorker(), new CompareTaskTime(), new CompareTaskRandom<LoadingTask>());
+
 
         }
     }
