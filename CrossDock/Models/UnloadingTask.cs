@@ -22,5 +22,10 @@ namespace CrossDock.Models
         public int Id { get => _id; }
         public int ArrivalTime { get => _arrivalTime; set => _arrivalTime = value; }
         public int ProductsAmount { get => _productsAmount; set => _productsAmount = value; }
+
+        public UnloadingTask Clone()
+        {
+            return new UnloadingTask(Id, ArrivalTime, ProductsAmount);
+        }
     }
 }

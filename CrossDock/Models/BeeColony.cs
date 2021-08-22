@@ -191,6 +191,7 @@ namespace CrossDock.Models
         public INeighborhoodSearch NeighborhoodSearch { get => _neighborhoodSearch; set => _neighborhoodSearch = value; }
         //public IComparer Comparer { get => _comparer; set => _comparer = value; }
         public Bee BestBee { get => Colony[0]; }
+        internal IScheduler Scheduler { get => _scheduler; set => _scheduler = value; }
     }
 
     public class CompareBee : IComparer

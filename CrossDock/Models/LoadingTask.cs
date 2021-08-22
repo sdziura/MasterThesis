@@ -25,5 +25,9 @@ namespace CrossDock.Models
         public int Id { get => _id; }
         public int[] Demand { get => _demand; set => _demand = value; }
         public int ProductsAmount { get => _demand.Sum(); }
+        public LoadingTask Clone()
+        {
+            return new LoadingTask(Id, (int[])Demand.Clone());
+        }
     }
 }

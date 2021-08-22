@@ -82,7 +82,6 @@ namespace CrossDock.Models
             return true;
 
         }
-
         public void PrintSchedule()
         {
             Console.WriteLine("\nUnloading schedule:\n");
@@ -102,10 +101,13 @@ namespace CrossDock.Models
             }
 
         }
-
+        public void Late(int truckId, int lateness)
+        {
+            _plan.UnloadingTasks[truckId].ArrivalTime += lateness;
+        }
         public Bee Clone()
         {
-            return new Bee(_plan, (int[,])ScheduleUnloading.Clone(), (int[,])ScheduleLoading.Clone());
+            return new Bee(_plan.Clone(), (int[,])ScheduleUnloading.Clone(), (int[,])ScheduleLoading.Clone());
         }
     }
 

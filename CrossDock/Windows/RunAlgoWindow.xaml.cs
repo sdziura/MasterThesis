@@ -59,7 +59,17 @@ namespace CrossDock.Windows
 
         private void RunDynamicButon_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!int.TryParse(LateTruckBox.Text, out int lateTruck)) lateTruck = 0;
+            if (!int.TryParse(LatenessBox.Text, out int lateness)) lateness = 0;
+            if (!int.TryParse(TimeOfChangeBox.Text, out int timeOfChange)) timeOfChange = 0;
+            if (timeOfChange == 0) timeOfChange = colony.BestBee.Plan.UnloadingTasks[lateTruck].ArrivalTime;
+            if (timeOfChange <= colony.BestBee.Plan.UnloadingTasks[lateTruck].ArrivalTime)
+            {
+                Bee lateBee = colony.BestBee.Clone();
+                lateBee.Late(lateTruck, lateness);
+                colony.Scheduler.Reschedule(lateBee, timeOfChange);
+                DynamicResultBlock.DataContext = lateBee.TimeOfWork;
+            }
         }
     }
 }

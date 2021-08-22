@@ -76,5 +76,10 @@ namespace CrossDock.Models
                 return demand;
             }
         }
+
+        public TransportationPlan Clone()
+        {
+            return new TransportationPlan(ArrivalTimes, Demand);
+        }
     }
 }
