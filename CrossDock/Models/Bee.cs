@@ -17,7 +17,8 @@ namespace CrossDock.Models
 
         public Bee()
         {
-
+            ScheduleUnloading = new int[ParametersValues.Instance.NumberOfInboundTrucks, 4];
+            ScheduleLoading = new int[ParametersValues.Instance.NumberOfOutboundTrucks, 4];
         }
         public Bee(bool k)
         {
@@ -85,7 +86,7 @@ namespace CrossDock.Models
         public void PrintSchedule()
         {
             Console.WriteLine("\nUnloading schedule:\n");
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < ParametersValues.Instance.NumberOfInboundTrucks; i++)
             {
                 for (int j = 0; j < 4; j++)
                     Console.Write(ScheduleUnloading[i, j] + " ");
@@ -93,7 +94,7 @@ namespace CrossDock.Models
             }
 
             Console.WriteLine("\nLoading schedule:\n");
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < ParametersValues.Instance.NumberOfOutboundTrucks; i++)
             {
                 for (int j = 0; j < 4; j++)
                     Console.Write(ScheduleLoading[i, j] + " ");
