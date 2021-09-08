@@ -26,13 +26,16 @@ namespace CrossDock.Schedulers
         }
         private Bee FindBee(Bee currentBee, bool[] isSchedule, Bee bestBee, int[] workersTime, int[] inDocksTime, int[] outDocksTime)
         {
-            for (int taskIterator = 0; taskIterator < ParametersValues.Instance.NumberOfInboundTrucks + ParametersValues.Instance.NumberOfOutboundTrucks; taskIterator++)
+            // Choose task to schedule
+            for (int taskIterator = 0; taskIterator < (ParametersValues.Instance.NumberOfInboundTrucks + ParametersValues.Instance.NumberOfOutboundTrucks); taskIterator++)
             {
+                // Skip if already scheduled
                 if (isSchedule[taskIterator])
                 {
                     continue;
                 }
                 int productsReadyTime = 0;
+                // Schedule loading task
                 if (taskIterator >= ParametersValues.Instance.NumberOfInboundTrucks)
                 {
                     bool isReady = true;

@@ -22,7 +22,7 @@ namespace CrossDock.Models
         }
         public Bee(bool k)
         {
-            isSolutionFound = k;
+            IsSolutionFound = k;
         }
         public Bee(TransportationPlan plan, int[,] scheduleUnloading, int[,] scheduleLoading)
         {
@@ -34,7 +34,8 @@ namespace CrossDock.Models
         public int[,] ScheduleUnloading { get => _scheduleUnloading; set => _scheduleUnloading = value; }
         public int[,] ScheduleLoading { get => _scheduleLoading; set => _scheduleLoading = value; }
         public TransportationPlan Plan { get => _plan; set => _plan = value; }
-        public int TimeOfWork { get => isSolutionFound? _TimeOfWork(): Int32.MaxValue;}
+        public int TimeOfWork { get => IsSolutionFound? _TimeOfWork(): Int32.MaxValue;}
+        public bool IsSolutionFound { get => isSolutionFound; set => isSolutionFound = value; }
 
         private int _TimeOfWork()
         {

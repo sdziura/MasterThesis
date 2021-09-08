@@ -24,7 +24,7 @@ namespace CrossDockUnitTests
             ParametersValues.Instance.NumberOfOutboundTrucks = 3;
             ParametersValues.Instance.ScoutBeesNumber = 1;
             ParametersValues.Instance.SelectedRegionsNumber = 1;
-            ParametersValues.Instance.EliteBeesNumber = 1;
+            ParametersValues.Instance.EliteRegionsNumber = 1;
             ParametersValues.Instance.SelectedRegionsBeesNumber = 1;
             ParametersValues.Instance.EliteRegionBeesNumber = 1;
             ParametersValues.Instance.TimePerProductUnit = 1;
@@ -46,9 +46,9 @@ namespace CrossDockUnitTests
             LoadingTask l2 = new LoadingTask(2, new int[] { 1, 0, 7, 1, 3 });
 
             TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1, t2, t3, t4 }, new LoadingTask[] { l0, l1, l2 });
-            IComparer comparer = new CompareTaskTime();
+            var comparer = new CompareTaskTime();
             FifoScheduler sched = new FifoScheduler(plan);
-            Bee bee = sched.Schedule(comparer);
+            Bee bee = sched.Schedule();
 
             for (int i = 0; i < 5; i++)
             {
@@ -72,7 +72,7 @@ namespace CrossDockUnitTests
 
             NeighborhoodSearchWorker neigherhood = new NeighborhoodSearchWorker();
 
-            bee = neigherhood.SearchRegion(bee, plan);
+            bee = neigherhood.SearchRegion(bee);
 
             for (int i = 0; i < 5; i++)
             {

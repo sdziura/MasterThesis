@@ -167,5 +167,49 @@ namespace CrossDockUnitTests
                 Console.WriteLine();
             }
         }
+
+        [Test]
+        public void ScheduleTest2()
+        {
+            ParametersValues.Instance.NumberOfIterations = 40;
+            ParametersValues.Instance.MaxStorageCapacity = 100;
+            ParametersValues.Instance.NumberOfWorkers = 2;
+            ParametersValues.Instance.NumberOfInboundDocks = 2;
+            ParametersValues.Instance.NumberOfOutboundDocks = 2;
+            ParametersValues.Instance.NumberOfInboundTrucks = 2;
+            ParametersValues.Instance.NumberOfOutboundTrucks = 2;
+            ParametersValues.Instance.ScoutBeesNumber = 40;
+            ParametersValues.Instance.SelectedRegionsNumber = 20;
+            ParametersValues.Instance.EliteRegionsNumber = 10;
+            ParametersValues.Instance.SelectedRegionsBeesNumber = 5;
+            ParametersValues.Instance.EliteRegionBeesNumber = 15;
+            ParametersValues.Instance.TimePerProductUnit = 1;
+
+            UnloadingTask t0 = new UnloadingTask(0, 5, 6);
+            UnloadingTask t1 = new UnloadingTask(1, 10, 3);
+
+            LoadingTask l0 = new LoadingTask(0, new int[] { 5, 2 });
+            LoadingTask l1 = new LoadingTask(1, new int[] { 0, 1 });
+
+            TransportationPlan plan = new TransportationPlan(new UnloadingTask[] { t0, t1 }, new LoadingTask[] { l0, l1});
+            IComparer<UnloadingTask> comparer = new CompareTaskTime();
+            FifoScheduler sched = new FifoScheduler(plan);
+            Bee bee = sched.Schedule();
+            Console.WriteLine(bee.TimeOfWork);
+            Console.WriteLine();
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                    Console.Write(bee.ScheduleUnloading[i, j] + " ");
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                    Console.Write(bee.ScheduleLoading[i, j] + " ");
+                Console.WriteLine();
+            }
+        }
     }
 }

@@ -100,36 +100,35 @@ namespace CrossDock.Schedulers
             {
                 int unloadingTaskID = sortedUnloadingTasks[queueIterator].Id;
 
-                if (isUnloadingScheduled[unloadingTaskID] == 1) continue;
+                if (isUnloadingScheduled[unloadingTaskID] != 1)
+                {
+                    // Schedule one unloading task and get the row with all information for the schedule
+                    int[] row = ScheduleOneUnloading(unloadingTaskID, inboundDocksFreeTime, workersFreeTime);
 
-                // Schedule one unloading task and get the row with all information for the schedule
-                int[] row = ScheduleOneUnloading(unloadingTaskID, inboundDocksFreeTime, workersFreeTime);
+                    // Sign task and resources to schedule
+                    bee.ScheduleUnloading[unloadingTaskID, 0] = row[0];
+                    bee.ScheduleUnloading[unloadingTaskID, 1] = row[1];
+                    bee.ScheduleUnloading[unloadingTaskID, 2] = row[2];
+                    bee.ScheduleUnloading[unloadingTaskID, 3] = row[3];
 
-                // Sign task and resources to schedule
-                bee.ScheduleUnloading[unloadingTaskID, 0] = row[0];
-                bee.ScheduleUnloading[unloadingTaskID, 1] = row[1];
-                bee.ScheduleUnloading[unloadingTaskID, 2] = row[2];
-                bee.ScheduleUnloading[unloadingTaskID, 3] = row[3];
+                    // Update free time of dock and worker team
+                    inboundDocksFreeTime[row[0]] = row[3];
+                    workersFreeTime[row[1]] = row[3];
 
-                // Update free time of dock and worker team
-                inboundDocksFreeTime[row[0]] = row[3];
-                workersFreeTime[row[1]] = row[3];
+                    isUnloadingScheduled[unloadingTaskID] = 1;
+                }
 
-                isUnloadingScheduled[unloadingTaskID] = 1;
-
-
-                // Check if the outbound task can be scheduled
+                // Check if the outbound task can be scheduled !isLoadingScheduled.All(x => x==1)
                 for (int loadingTaskIterator = 0; loadingTaskIterator < ParametersValues.Instance.NumberOfOutboundTrucks; loadingTaskIterator++)
                 {
                     int loadingTaskID = sortedLoadingTasks[loadingTaskIterator].Id;
                     if (isLoadingScheduled[loadingTaskID] == 1) continue;
-
                     // returns time when demend is met, or 0 when its still unknown
                     int arrivalTimeOut = CheckIfDemandMet(bee.ScheduleUnloading, loadingTaskID,
                                                             isLoadingScheduled, isUnloadingScheduled);
                     if (arrivalTimeOut != 0)
                     {
-                        int[] rowOut = ScheduleOneLoading(loadingTaskIterator, outboundDocksFreeTime, workersFreeTime, arrivalTimeOut);
+                        int[] rowOut = ScheduleOneLoading(loadingTaskID, outboundDocksFreeTime, workersFreeTime, arrivalTimeOut);
 
                         // Sign task and resources to schedule
                         bee.ScheduleLoading[loadingTaskID, 0] = rowOut[0];
@@ -142,12 +141,11 @@ namespace CrossDock.Schedulers
                         workersFreeTime[rowOut[1]] = rowOut[3];
 
                         isLoadingScheduled[loadingTaskID] = 1;
-                        continue;
+                        //continue;
                     }
                     else break;
                 }
             }
-            
             return bee;
         }
 
@@ -158,7 +156,8 @@ namespace CrossDock.Schedulers
             Array.Copy(Plan.UnloadingTasks, sortedUnloadingTasks, ParametersValues.Instance.NumberOfInboundTrucks);
             Array.Copy(Plan.LoadingTasks, sortedLoadingTasks, ParametersValues.Instance.NumberOfOutboundTrucks);
             Array.Sort(sortedUnloadingTasks, UnloadingComparer);
-            Array.Sort(sortedLoadingTasks, LoadingComparer);
+            //Array.Sort(sortedLoadingTasks, LoadingComparer);
+            sortedLoadingTasks.OrderBy(x => _random.Next()).ToArray();
 
             // Columns number : 4 (0:dock ID, 1:worker team ID, 2:start time, 3:end time)
             int[,] scheduleUnloading = new int[ParametersValues.Instance.NumberOfInboundTrucks, 4];

@@ -19,7 +19,7 @@ namespace CrossDockUnitTests
             ParametersValues.Instance.NumberOfOutboundTrucks = 1;
             ParametersValues.Instance.ScoutBeesNumber = 1;
             ParametersValues.Instance.SelectedRegionsNumber = 1;
-            ParametersValues.Instance.EliteBeesNumber = 1;
+            ParametersValues.Instance.EliteRegionBeesNumber = 1;
             ParametersValues.Instance.SelectedRegionsBeesNumber = 1;
             ParametersValues.Instance.EliteRegionBeesNumber = 1;            
         }

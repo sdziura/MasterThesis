@@ -35,7 +35,8 @@ namespace CrossDock.Models
                     if(tries++ > ParametersValues.Instance.TriesToSchedulePreError)
                     {
                         Console.WriteLine("Could not find bee nr " + i + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity );
-                        return;
+                        _colony[i].IsSolutionFound = false;
+                        break;
                     }
                     _colony[i] = _scheduler.Schedule();
                 } while (!_colony[i].CheckStorage());
@@ -66,10 +67,11 @@ namespace CrossDock.Models
                             if (tries++ > ParametersValues.Instance.TriesToSchedulePreError)
                             {
                                 Console.WriteLine("Could not find neighbor elite nr " + i + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity);
-                                neighborBees[i] = new Bee(false);
+                                neighborBees[i].IsSolutionFound = false;
                                 break;
                             }
                             neighborBees[i] = _scheduler.Reschedule(_colony[scoutID].Clone(), random.Next(_colony[scoutID].TimeOfWork));
+                            //Console.WriteLine(i+" ELITE: " + neighborBees[i].TimeOfWork);// TBD
                         } while (!neighborBees[i].CheckStorage());
                     }
                     Array.Sort(neighborBees, beeComparer);
@@ -86,7 +88,7 @@ namespace CrossDock.Models
                             if (tries++ > ParametersValues.Instance.TriesToSchedulePreError)
                             {
                                 Console.WriteLine("Could not find neighbor normal nr " + i + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity);
-                                neighborBees[i] = new Bee(false);
+                                neighborBees[i].IsSolutionFound = false;
                                 break;
                             }
                             neighborBees[i] = _scheduler.Reschedule(_colony[scoutID].Clone(), random.Next(_colony[scoutID].TimeOfWork));
@@ -103,13 +105,13 @@ namespace CrossDock.Models
                         if (tries++ > ParametersValues.Instance.TriesToSchedulePreError)
                         {
                             Console.WriteLine("Could not find neighbor new bee " + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity);
-                            newBee = new Bee(false);
+                            newBee.IsSolutionFound = false;
                             break;
                         }
                         newBee = _scheduler.Schedule();
                     } while (!newBee.CheckStorage());
                 }
-                Console.WriteLine(newBee.TimeOfWork + " " + _colony[scoutID].TimeOfWork);//tbd
+                //Console.WriteLine(newBee.TimeOfWork + " " + _colony[scoutID].TimeOfWork);//tbd
                 if (newBee.TimeOfWork < _colony[scoutID].TimeOfWork)
                     _colony[scoutID] = newBee;
             }

@@ -19,25 +19,48 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
+        <!--Buttons-->
         <Button x:Name="RunStaticButon" Content="Run Static" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Width="100" Height="30" Click="RunStaticButon_Click"/>
         <Button x:Name="RunDynamicButon" Content="Run Dynamic" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="3" Width="100" Height="30" Click="RunDynamicButon_Click"/>
+        <Button x:Name="RunExactButon" Content="Run Exact" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Width="100" Height="30" Click="RunExactButon_Click"/>
 
-        <TextBlock x:Name="StaticInitBlock" Text="{Binding}" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" FontSize="20" FontWeight="Black"/>
-        <TextBlock x:Name="StaticWorstBlock" Text="{Binding}" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right"  FontSize="20" FontWeight="Black"/>
-        <TextBlock x:Name="StaticResultBlock" Text="{Binding}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" FontSize="30" FontWeight="Bold"/>
+        <!--Static-->
+        <TextBlock Text="1st population best: " Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" FontSize="20" FontWeight="Medium"/>
+        <TextBlock Text="1st population worst: " Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right"  FontSize="20" FontWeight="Medium"/>
+        <TextBlock Text="Final result: " Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" FontSize="30" FontWeight="Bold"/>
+        <TextBlock Text="Time: " Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" FontSize="20" FontWeight="Medium"/>
 
-        <TextBox x:Name="LateTruckBox" Width="100" Height="40" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center"/>
-        <TextBox x:Name="LatenessBox" Width="100" Height="40" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center"/>
-        <TextBox x:Name="TimeOfChangeBox" Width="100" Height="40" Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="StaticInitBlock" Text="{Binding}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="20" FontWeight="Black"/>
+        <TextBlock x:Name="StaticWorstBlock" Text="{Binding}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center"  FontSize="20" FontWeight="Black"/>
+        <TextBlock x:Name="StaticResultBlock" Text="{Binding}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
+        <TextBlock x:Name="StaticTimeBlock" Text="{Binding}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
 
-        <TextBlock Text="Late Truck ID: " Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23"/>
-        <TextBlock Text="How late: " Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="23"/>
-        <TextBlock Text="When changed: " Grid.Row="3" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="23"/>
-        <TextBlock Text="Result: " Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 30 0 0 " FontSize="23"/>
-        <TextBlock x:Name="DynamicResultBlock" Text="{Binding}"  Grid.Column="4" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 30 0 0 " FontSize="30" FontWeight="Bold"/>
+        <!--Dynamic-->
+        <TextBox x:Name="LateTruckBox" Width="100" Height="40" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center"/>
+        <TextBox x:Name="LatenessBox" Width="100" Height="40" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center"/>
+        <TextBox x:Name="TimeOfChangeBox" Width="100" Height="40" Grid.Column="4" Grid.Row="3" HorizontalAlignment="Center" FontSize="15" TextAlignment="Center"/>
+        <TextBlock x:Name="DynamicResultBlock" Text="{Binding}"  Grid.Column="4" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top"  FontSize="30" FontWeight="Bold"/>
+        <TextBlock x:Name="DynamicTimeBlock" Text="{Binding}" Grid.Column="4" Grid.Row="5" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
+
+        <TextBlock Text="Late Truck ID: " Grid.Column="3" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="23"/>
+        <TextBlock Text="How late: " Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="23"/>
+        <TextBlock Text="When changed: " Grid.Column="3" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="23"/>
+        <TextBlock Text="Result: " Grid.Column="3" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="23" FontWeight="Bold"/>
+        <TextBlock Text="Time: " Grid.Column="3" Grid.Row="5" HorizontalAlignment="Right" FontSize="20" FontWeight="Medium"/>
+        
+        <!--Exact-->
+        <TextBlock Text="Result: " Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="23" FontWeight="Bold"/>
+        <TextBlock Text="Time: " Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" FontSize="20" FontWeight="Medium"/>
+        <TextBlock x:Name="ExactResultBlock" Text="{Binding}"  Grid.Column="1" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Top"  FontSize="30" FontWeight="Bold"/>
+        <TextBlock x:Name="ExactTimeBlock" Text="{Binding}" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
+
 
         <!--<DataGrid x:Name="StaticInboundGrid" Grid.Row="2" Grid.Column="0" >
         <DataGrid.Columns>

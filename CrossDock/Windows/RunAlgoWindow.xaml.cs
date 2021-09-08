@@ -34,8 +34,12 @@ namespace CrossDock.Windows
             StaticWorstBlock.DataContext = a;
             int b = colony.BestBee.TimeOfWork;
             StaticInitBlock.DataContext = b;
-
+            
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             colony.AllGenerations();
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            
             /*var colId = new DataGridTextColumn();
             var bindingId = new Binding("Id");
             colId.Binding = bindingId;
@@ -55,6 +59,7 @@ namespace CrossDock.Windows
             StaticGrid.ItemsSource = colony.*/
 
             StaticResultBlock.DataContext = colony.BestBee.TimeOfWork;
+            StaticTimeBlock.DataContext = elapsedMs;
         }
 
         private void RunDynamicButon_Click(object sender, RoutedEventArgs e)
@@ -66,10 +71,25 @@ namespace CrossDock.Windows
             if (timeOfChange <= colony.BestBee.Plan.UnloadingTasks[lateTruck].ArrivalTime)
             {
                 Bee lateBee = colony.BestBee.Clone();
+                var watch = System.Diagnostics.Stopwatch.StartNew();
                 lateBee.Late(lateTruck, lateness);
                 colony.Scheduler.Reschedule(lateBee, timeOfChange);
+                watch.Stop();
+                var elapsedMs = watch.ElapsedMilliseconds;
                 DynamicResultBlock.DataContext = lateBee.TimeOfWork;
+                DynamicTimeBlock.DataContext = elapsedMs;
             }
+        }
+
+        private void RunExactButon_Click(object sender, RoutedEventArgs e)
+        {
+            DepthFirstScheduler depth = new DepthFirstScheduler(MainWindow.TransportationPlan);
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            Bee bee = depth.Schedule();
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            ExactResultBlock.DataContext = bee.TimeOfWork;
+            ExactTimeBlock.DataContext = elapsedMs;
         }
     }
 }
