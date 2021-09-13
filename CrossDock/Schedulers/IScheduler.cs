@@ -10,5 +10,7 @@ namespace CrossDock.Schedulers
     {
         Bee Schedule();
         Bee Reschedule(Bee bee, int time);
+        Bee RescheduleV2(Bee bee, int time);
+
     }
 }

@@ -29,7 +29,7 @@ namespace CrossDock.Windows
 
         private void RunStaticButon_Click(object sender, RoutedEventArgs e)
         {
-            colony = new BeeColony(MainWindow.TransportationPlan, new NeighborhoodSearchWorker(), new CompareTaskTime(), new CompareTaskRandom<LoadingTask>());
+            colony = new BeeColony(MainWindow.TransportationPlan, new NeighborhoodSearchWorker(), new CompareTaskRandom<UnloadingTask>(), new CompareTaskRandom<LoadingTask>());
             int a = colony.Colony[ParametersValues.Instance.ScoutBeesNumber - 1].TimeOfWork;
             StaticWorstBlock.DataContext = a;
             int b = colony.BestBee.TimeOfWork;

@@ -13,7 +13,6 @@ namespace CrossDock.Models
         private Bee[] _colony;
         private IScheduler _scheduler;
         INeighborhoodSearch _neighborhoodSearch;
-        //IComparer _comparer;
 
         public BeeColony()
         {
@@ -70,8 +69,7 @@ namespace CrossDock.Models
                                 neighborBees[i].IsSolutionFound = false;
                                 break;
                             }
-                            neighborBees[i] = _scheduler.Reschedule(_colony[scoutID].Clone(), random.Next(_colony[scoutID].TimeOfWork));
-                            //Console.WriteLine(i+" ELITE: " + neighborBees[i].TimeOfWork);// TBD
+                            neighborBees[i] = _scheduler.RescheduleV2(_colony[scoutID].Clone(), random.Next(_colony[scoutID].IsSolutionFound ? _colony[scoutID].TimeOfWork : 0));
                         } while (!neighborBees[i].CheckStorage());
                     }
                     Array.Sort(neighborBees, beeComparer);
@@ -91,7 +89,7 @@ namespace CrossDock.Models
                                 neighborBees[i].IsSolutionFound = false;
                                 break;
                             }
-                            neighborBees[i] = _scheduler.Reschedule(_colony[scoutID].Clone(), random.Next(_colony[scoutID].TimeOfWork));
+                            neighborBees[i] = _scheduler.RescheduleV2(_colony[scoutID].Clone(), random.Next(_colony[scoutID].IsSolutionFound ? _colony[scoutID].TimeOfWork : 0));
                         } while (!neighborBees[i].CheckStorage());
                     }
                     Array.Sort(neighborBees, beeComparer);
@@ -117,7 +115,7 @@ namespace CrossDock.Models
             }
             Array.Sort(_colony, beeComparer);
         }
-
+      
         public void NextIteration_OLD()
         {
             IComparer beeComparer = new CompareBee();
