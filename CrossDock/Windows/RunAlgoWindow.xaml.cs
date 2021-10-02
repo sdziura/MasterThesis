@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CrossDock.Parameters;
+using System.Linq;
 
 namespace CrossDock.Windows
 {
@@ -36,10 +37,10 @@ namespace CrossDock.Windows
             StaticInitBlock.DataContext = b;
             
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            colony.AllGenerations();
+            var generationResults = colony.AllGenerations();
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
-            
+
             /*var colId = new DataGridTextColumn();
             var bindingId = new Binding("Id");
             colId.Binding = bindingId;
@@ -57,7 +58,9 @@ namespace CrossDock.Windows
             ArrivalTimesGrid.ItemsSource = MainWindow.TransportationPlan.UnloadingTasks;
             DemandGrid.ItemsSource = MainWindow.TransportationPlan.LoadingTasks;
             StaticGrid.ItemsSource = colony.*/
-
+            StaticGenResultsBox.Text = string.Join("\n", generationResults);
+            //Clipboard.SetDataObject(generationResults.ToString());
+            //StaticResultsList.DataContext = generationResults;
             StaticResultBlock.DataContext = colony.BestBee.TimeOfWork;
             StaticTimeBlock.DataContext = elapsedMs;
         }
@@ -73,7 +76,7 @@ namespace CrossDock.Windows
                 Bee lateBee = colony.BestBee.Clone();
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 lateBee.Late(lateTruck, lateness);
-                colony.Scheduler.Reschedule(lateBee, timeOfChange);
+                lateBee = colony.Scheduler.DynamicReschedule(lateBee, timeOfChange);
                 watch.Stop();
                 var elapsedMs = watch.ElapsedMilliseconds;
                 DynamicResultBlock.DataContext = lateBee.TimeOfWork;
@@ -90,6 +93,27 @@ namespace CrossDock.Windows
             var elapsedMs = watch.ElapsedMilliseconds;
             ExactResultBlock.DataContext = bee.TimeOfWork;
             ExactTimeBlock.DataContext = elapsedMs;
+        }
+
+        private void RunMultitButon_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (!int.TryParse(MultiBox.Text, out int multi)) return;
+            var results = new int[multi];
+            var times = new long[multi];
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            for (int i = 0; i < multi; i++)
+            {
+                colony = new BeeColony(MainWindow.TransportationPlan, new NeighborhoodSearchWorker(), new CompareTaskRandom<UnloadingTask>(), new CompareTaskRandom<LoadingTask>());
+                watch = System.Diagnostics.Stopwatch.StartNew();
+                colony.AllGenerations();
+                watch.Stop();
+                results[i] = colony.BestBee.TimeOfWork;
+                times[i] = watch.ElapsedMilliseconds;
+            }
+            StaticMultiResultsBox.Text = string.Join("\n", results);
+            StaticMultiResultsBox.Text += "\nTimes:\n";
+            StaticMultiResultsBox.Text += string.Join("\n", times);
         }
     }
 }

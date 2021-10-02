@@ -179,12 +179,15 @@ namespace CrossDock.Models
             Array.Sort(_colony, beeComparer);
         }
 
-        public void AllGenerations()
+        public int[] AllGenerations()
         {
+            int[] generationResults = new int[ParametersValues.Instance.NumberOfIterations];
             for(int i = 0; i < ParametersValues.Instance.NumberOfIterations; i++)
             {
                 NextIteration();
+                generationResults[i] = BestBee.TimeOfWork;
             }
+            return generationResults;
         }
 
         public Bee[] Colony { get => _colony; set => _colony = value; }

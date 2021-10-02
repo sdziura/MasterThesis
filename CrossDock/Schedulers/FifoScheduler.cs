@@ -169,7 +169,7 @@ namespace CrossDock.Schedulers
             // Removing from schedule tasks that are not yet started
             for (int i = 0; i < ParametersValues.Instance.NumberOfInboundTrucks; i++)
             {
-                if (bee.ScheduleUnloading[i, 2] > time)
+                if (bee.ScheduleUnloading[i, 2] >= time)
                 {
                     for (int j = 0; j < 4; j++) bee.ScheduleUnloading[i, j] = 0;
                     isUnloadingScheduled[i] = 0;
@@ -177,7 +177,7 @@ namespace CrossDock.Schedulers
             }
             for (int i = 0; i < ParametersValues.Instance.NumberOfOutboundTrucks; i++)
             {
-                if (bee.ScheduleLoading[i, 2] > time)
+                if (bee.ScheduleLoading[i, 2] >= time)
                 {
                     for (int j = 0; j < 4; j++) bee.ScheduleLoading[i, j] = 0;
                     isLoadingScheduled[i] = 0;
@@ -338,6 +338,31 @@ namespace CrossDock.Schedulers
                 }
             }
             return new Bee(Plan, scheduleUnloading, scheduleLoading);
+        }
+        public Bee DynamicReschedule(Bee bee, int time)
+        {
+            Bee[] neighborBees = new Bee[ParametersValues.Instance.ScoutBeesNumber];
+            Bee bestBee = new Bee(false);
+            for (int j = 0; j < ParametersValues.Instance.NumberOfIterations; j++)
+            {
+                for (int i = 0; i < ParametersValues.Instance.ScoutBeesNumber; i++)
+                {
+                    int tries = 0;
+                    do
+                    {
+                        if (tries++ > ParametersValues.Instance.TriesToSchedulePreError)
+                        {
+                            Console.WriteLine("Could not find dynamic neighbor nr " + i + " after " + (tries - 2) + " tries.\nStorage oveloaded over maximum " + ParametersValues.Instance.MaxStorageCapacity);
+                            neighborBees[i].IsSolutionFound = false;
+                            break;
+                        }
+                        neighborBees[i] = RescheduleV2(bee.Clone(), time);
+                    } while (!neighborBees[i].CheckStorage());
+                }
+                Array.Sort(neighborBees, new CompareBee());
+                bestBee = bestBee.TimeOfWork > neighborBees[0].TimeOfWork? neighborBees[0] : bestBee;
+            }
+            return bestBee;            
         }
 
         public int[] ScheduleOneUnloading( int taskId, int[] inboundDocksFreeTime, int[] workersFreeTime)

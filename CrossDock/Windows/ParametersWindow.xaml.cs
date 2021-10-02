@@ -32,7 +32,7 @@ namespace CrossDock.Windows
             // Set filter for file extension and default file extension 
             dlg.DefaultExt = ".json";
             dlg.Filter = "JSON Files (*.json)|*.json|TXT Files (*.txt)|*.txt|ALL Files |*";
-            dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "saved_files\\parameters_settings";
 
             // Display OpenFileDialog by calling ShowDialog method 
             Nullable<bool> result = dlg.ShowDialog();
@@ -59,7 +59,7 @@ namespace CrossDock.Windows
             // Set filter for file extension and default file extension 
             dlg.DefaultExt = ".json";
             dlg.Filter = "JSON Files (*.json)|*.json|TXT Files (*.txt)|*.txt|ALL Files (*)|*";
-            dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            dlg.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "saved_files\\parameters_settings";
 
             // Display OpenFileDialog by calling ShowDialog method 
             Nullable<bool> result = dlg.ShowDialog();
