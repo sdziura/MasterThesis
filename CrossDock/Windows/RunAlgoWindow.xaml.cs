@@ -74,9 +74,10 @@ namespace CrossDock.Windows
             if (timeOfChange <= colony.BestBee.Plan.UnloadingTasks[lateTruck].ArrivalTime)
             {
                 Bee lateBee = colony.BestBee.Clone();
+                FifoScheduler lateSchedule = new FifoScheduler(lateBee.Plan);
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 lateBee.Late(lateTruck, lateness);
-                lateBee = colony.Scheduler.DynamicReschedule(lateBee, timeOfChange);
+                lateBee = lateSchedule.DynamicReschedule(lateBee, timeOfChange);
                 watch.Stop();
                 var elapsedMs = watch.ElapsedMilliseconds;
                 DynamicResultBlock.DataContext = lateBee.TimeOfWork;

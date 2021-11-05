@@ -21,7 +21,7 @@ namespace CrossDock.Generators
                 for (int j = 0; j < ParametersValues.Instance.NumberOfInboundTrucks; j++)
                 {
                     if (random.Next(100) < avgPrecentageOfProductTypes)
-                        demand[i, j] = random.Next(maxProductDemand);
+                        demand[i, j] = random.Next(maxProductDemand) + 1;
                     sum += demand[i, j];
                 }
                 if (sum == 0)
